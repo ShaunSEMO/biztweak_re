@@ -13,10 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::put('/{id}/add-profile-picture', [App\Http\Controllers\HomeController::class, 'addProfilePic'])->name('addProfilePic');
+Route::get('/{id}/add-company', [App\Http\Controllers\HomeController::class, 'addCompany'])->name('addCompany');
