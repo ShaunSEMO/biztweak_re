@@ -45,7 +45,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function biz_profile()
+    public function biz_profiles()
     {
         return $this->hasMany('App\Models\biz_profile');
     }

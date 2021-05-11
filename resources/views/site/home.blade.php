@@ -43,6 +43,28 @@
 
                 <div class="card-body">
                     <a class='btn btn-primary' href="{{ url($user->id.'/add-company') }}"><i class="fas fa-plus-circle"></i></a>
+                    <br>
+                    <br>
+                    @if (count($user->biz_profiles)>0)
+                        <div class="row">
+                            @foreach ($user->biz_profiles as $biz)
+                                <div class="col-md-4">
+                                    <div class="card text-dark bg-info mb-3" style="max-width: 18rem;">
+                                        <div class="card-header">{{ $biz->name }}</div>
+                                        <div class="card-body">
+                                            <img class="img-fluid thumbnail" src="{{ asset($biz->logo) }}" alt="Business logo">
+                                            @if (isset($biz->reg_number))
+                                                <p>{{ $biz->reg_number }}</p>
+                                            @endif
+                                            <p>{{ $biz->industry }}</p>
+                                            <small>{{ $biz->biz_phase }}</small>
+                                        </div>
+                                      </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+                    
                 </div>
             </div>
         </div>

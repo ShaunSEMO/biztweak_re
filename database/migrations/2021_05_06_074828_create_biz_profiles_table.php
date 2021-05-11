@@ -15,8 +15,9 @@ class CreateBizProfilesTable extends Migration
     {
         Schema::create('biz_profiles', function (Blueprint $table) {
             $table->id();
-            $table->integer('entr_id');
+            $table->integer('user_id');
             $table->char('name', 200);
+            $table->string('logo')->nullable();
             $table->boolean('registered');
             $table->string('reg_number')->nullable();
             $table->string('location');
