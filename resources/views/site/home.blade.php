@@ -49,17 +49,19 @@
                         <div class="row">
                             @foreach ($user->biz_profiles as $biz)
                                 <div class="col-md-4">
-                                    <div class="card text-dark bg-info mb-3" style="max-width: 18rem;">
-                                        <div class="card-header">{{ $biz->name }}</div>
-                                        <div class="card-body">
-                                            <img class="img-fluid thumbnail" src="{{ asset($biz->logo) }}" alt="Business logo">
-                                            @if (isset($biz->reg_number))
-                                                <p>{{ $biz->reg_number }}</p>
-                                            @endif
-                                            <p>{{ $biz->industry }}</p>
-                                            <small>{{ $biz->biz_phase }}</small>
+                                    <a href="{{ url($biz->id.'/manage-company') }}" style="text-decoration: none;">
+                                        <div class="card text-dark bg-info mb-3" style="max-width: 18rem;">
+                                            <div class="card-header">{{ $biz->name }}</div>
+                                            <div class="card-body">
+                                                <img class="img-fluid thumbnail" src="{{ asset($biz->logo) }}" alt="Business logo">
+                                                @if (isset($biz->reg_number))
+                                                    <p>{{ $biz->reg_number }}</p>
+                                                @endif
+                                                <p>{{ $biz->industry }}</p>
+                                                <small>{{ $biz->biz_phase }}</small>
+                                            </div>
                                         </div>
-                                      </div>
+                                    </a>
                                 </div>
                             @endforeach
                         </div>

@@ -69,62 +69,6 @@
                             </div>
                         </div>
 
-                        
-
-
-                        {{ Form::text('name', '', ['class'=>'form-control', 'placeholder'=>'Company name...']) }}
-                        <hr>
-                        {{ Form::file('image') }}
-                        <hr>
-                        <p>Is your company registered?</p>
-                        {{ Form::label('registered', 'Yes') }}
-                        {{ Form::radio('registered', 0) }}
-                        {{ Form::label('registered', 'No') }}
-                        {{ Form::radio('registered', 1) }}
-                        <hr>
-                        {{ Form::text('reg_number', '', ['class'=>'form-control', 'id'=>'reg_number', 'placeholder'=>'Registration number...']) }}
-                        <hr>
-                        {{ Form::text('location', '', ['class'=>'form-control', 'placeholder'=>'Company physical address...']) }}
-                        <hr>
-                        <p>Business industry</p>
-                        {{ Form::select('industry', [
-                            'Admin/Business support' => 'Admin/Business support', 
-                            'Agriculture, Forestry,Fishing and Hunting' => 'Agriculture, Forestry,Fishing and Hunting', 
-                            'Arts, Entertainment and Recreation'=>'Arts, Entertainment and Recreation',
-                            'Constrution'=>'Constrution', 
-                            'Education'=>'Education', 
-                            'Finance and Insurance'=>'Finance and Insurance', 
-                            'Healthcare and Social Assistance'=>'Healthcare and Social Assistance', 
-                            'Hospitality'=>'Hospitality', 
-                            'Information Technology'=>'Information Technology', 
-                            'Manufacturing'=>'Manufacturing', 
-                            'Mining and Mineral processing'=>'Mining and Mineral processing', 
-                            'Professional, Scientific and Technical Services'=>'Professional, Scientific and Technical Services', 
-                            'Real Estate'=>'Real Estate',
-                            'Retail'=>'Retail',
-                            'Transport and Logistics'=>'Transport and Logistics',
-                            'Other'=>'Other'
-                            ], 
-                            
-                            ['class'=>'form-control']) }}
-
-                        <hr>
-                        <p>Business Phase</p>
-                        {{ Form::select('biz_phase', [
-                            'phase_i' => 'I have an idea but don’t know what to do next', 
-                            'phase_ii' => 'I have a business but am not making money',
-                            'phase_iii' => 'I have products/services but I have poor sales',
-                            'phase_iv' => 'We are generating revenue, we would like to grow',
-                            'phase_v' => 'I would like to be an entrepreneur but don’t know where to start',
-                        ],
-                        
-                        ['class'=>'form-control']) }}
-                        <br>
-                        <br>
-
-
-
-
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">

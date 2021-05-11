@@ -78,4 +78,33 @@ class HomeController extends Controller
         return redirect('/');
 
     }
+
+    public function manageCompany($id) {
+        $company = biz_profile::find($id);
+        $user = User::find($company->user_id);
+        return view('site.bizProfile.manageCompany', compact(['company', 'user']));
+    }
+
+    public function editCompany ($id, Request $request) {
+        $company = biz_profile::find($id);
+        $company->name = $request->input('name');
+
+        if($request->hasFile('image')) {
+            $filenameWithExt = $request->file('image')->getClientOriginalName();
+            $path = $request->file('image')->storeAs('public/img/biz_logos', $filenameWithExt);
+            $company->logo = 'storage/img/biz_logos/'.$request->file('image')->getClientOriginalName();
+
+        } else {
+            $noImage = 'No image was selected';
+        }
+        
+        $company->registered  = $request->input('registered');
+        $company->reg_number  = $request->input('reg_number');
+        $company->location  = $request->input('location');
+        $company->industry  = $request->input('industry');
+        $company->biz_phase  = $request->input('biz_phase');
+        $company->save();
+
+        return redirect('/'.$id.'/manage-company');
+    }
 }

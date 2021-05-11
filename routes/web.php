@@ -24,3 +24,5 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 Route::put('/{id}/add-profile-picture', [App\Http\Controllers\HomeController::class, 'addProfilePic'])->name('addProfilePic');
 Route::get('/{id}/add-company', [App\Http\Controllers\HomeController::class, 'addCompany'])->name('addCompany');
 Route::post('/{id}/save-company', [App\Http\Controllers\HomeController::class, 'saveCompany'])->name('saveCompany');
+Route::get('/{id}/manage-company', [App\Http\Controllers\HomeController::class, 'manageCompany'])->name('manageCompany');
+Route::put('/{id}/edit-company', [App\Http\Controllers\HomeController::class, 'editCompany'])->name('editCompany');
