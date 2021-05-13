@@ -21,7 +21,6 @@ class RouteServiceProvider extends ServiceProvider
      */
 
     public const HOME = '/home';
-    public const AddBusinessProfile = '/{id}/add-company';
 
     /**
      * The controller namespace for the application.

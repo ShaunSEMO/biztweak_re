@@ -20,9 +20,20 @@ class CreateBizProfilesTable extends Migration
             $table->string('logo')->nullable();
             $table->boolean('registered');
             $table->string('reg_number')->nullable();
+            $table->string('reg_date')->nullable();
             $table->string('location');
             $table->string('industry');
             $table->string('biz_phase');
+            $table->bigInteger('num_employees');
+            $table->bigInteger('annual_turnover');
+            $table->bigInteger('monthly_turnover');
+            $table->text('offering');
+            $table->date('start_date');
+            $table->date('premise_start_date');
+            $table->string('company_bank');
+            $table->string('card_to_perc');
+            $table->string('cash_to_perc');
+            $table->string('eft_to_perc');
             $table->timestamps();
         });
     }

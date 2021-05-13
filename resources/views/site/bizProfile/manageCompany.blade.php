@@ -100,6 +100,9 @@
                                 <p>Registration Number</p>
                                 {{ Form::text('reg_number', $company->reg_number, ['class'=>'form-control', 'id'=>'reg_number', 'placeholder'=>'Registration number...']) }}
                                 <hr>
+                                <p>Registration Date</p>
+                                {{ Form::text('reg_date', $company->reg_date, ['class'=>'form-control', 'id'=>'reg_date', 'placeholder'=>'Registration date...']) }}
+                                <hr>
                                 <p>Company Location</p>
                                 {{ Form::text('location', $company->location, ['class'=>'form-control', 'placeholder'=>'Company physical address...']) }}
                                 <hr>
@@ -138,6 +141,51 @@
                                 $company->biz_phase,
                                 
                                 ['class'=>'form-control']) }}
+                                <hr>
+                                <p>Number of employees</p>
+                                {{ Form::number('num_employees', $company->num_employees, ['class'=>'form-control', 'id'=>'num_employees', 'placeholder'=>'Number of employees at your company...']) }}
+                                <hr>
+                                <p>Annual Turnover</p>
+                                {{ Form::number('annual_turnover', $company->annual_turnover, ['class'=>'form-control', 'id'=>'annual_turnover', 'placeholder'=>'What is your yearly turnover...']) }}
+                                <hr>
+                                <p>Monthly Turnover (Over 6 months)</p>
+                                {{ Form::number('monthly_turnover', $company->monthly_turnover, ['class'=>'form-control', 'id'=>'monthly_turnover', 'placeholder'=>'What was your monthly turnover in the past 6 months...']) }}
+                                <hr>
+                                <p>Products/Services</p>
+                                {{ Form::textarea('offering', $company->offering, ['class'=>'form-control', 'id'=>'offering', 'placeholder'=>'What products or services is your company offering?']) }}
+                                <hr>
+                                <p>Since when has your business been in operation?</p>
+                                {{ Form::date('start_date', $company->start_date, ['class'=>'form-control', 'id'=>'start_date', 'placeholder'=>'Select date']) }}
+                                <hr>
+                                <p>Since when has your business been operating on the premise?</p>
+                                {{ Form::date('premise_start_date', $company->premise_start_date, ['class'=>'form-control', 'id'=>'premise_start_date', 'placeholder'=>'Select date']) }}
+                                <hr>
+                                <p>Which bank does your company bank with?</p>
+                                {{ Form::select('company_bank', [
+                                    'absa' => 'ABSA', 
+                                    'nedbank' => 'Nedbank',
+                                    'standard_bank' => 'Standard Bank',
+                                    'fnb' => 'FNB/RNB',
+                                    'tyme_bank' => 'Tyme bank',
+                                ], 
+                                '',
+                                ['class'=>'form-control']) }}
+                                <hr>
+                                <p>What % of your turnover is</p>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <p>Card</p>
+                                        {{ Form::number('card_to_perc', $company->card_to_perc, ['class'=>'form-control', 'id'=>'card_to_perc']) }}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>Cash</p>
+                                        {{ Form::number('cash_to_perc', $company->cash_to_perc, ['class'=>'form-control', 'id'=>'cash_to_perc']) }}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>EFT</p>
+                                        {{ Form::number('eft_to_perc', $company->eft_to_perc, ['class'=>'form-control', 'id'=>'eft_to_perc']) }}
+                                    </div>
+                                </div>
                                 <br>
                                 <br>
                                 {{ Form::submit('Save', ['class' => 'btn btn-primary std-btn']) }}

@@ -63,16 +63,28 @@ class HomeController extends Controller
         if($request->hasFile('image')) {
             $filenameWithExt = $request->file('image')->getClientOriginalName();
             $path = $request->file('image')->storeAs('public/img/biz_logos', $filenameWithExt);
+            $company->logo = 'storage/img/biz_logos/'.$request->file('image')->getClientOriginalName();
+
         } else {
             $fileNameToStore = 'No image here.';
         }
-        $company->logo = 'storage/img/biz_logos/'.$request->file('image')->getClientOriginalName();
 
         $company->registered  = $request->input('registered');
         $company->reg_number  = $request->input('reg_number');
         $company->location  = $request->input('location');
         $company->industry  = $request->input('industry');
         $company->biz_phase  = $request->input('biz_phase');
+        $company->reg_date  = $request->input('reg_date');
+        $company->num_employees  = $request->input('num_employees');
+        $company->annual_turnover  = $request->input('annual_turnover');
+        $company->monthly_turnover  = $request->input('6mo_turnover');
+        $company->offering  = $request->input('offering');
+        $company->start_date  = $request->input('start_date');
+        $company->premise_start_date  = $request->input('premise_start_date');
+        $company->company_bank  = $request->input('company_bank');
+        $company->card_to_perc  = $request->input('card_to_perc');
+        $company->cash_to_perc  = $request->input('cash_to_perc');
+        $company->eft_to_perc  = $request->input('eft_to_perc');
         $company->save();
 
         return redirect('/');
@@ -103,6 +115,17 @@ class HomeController extends Controller
         $company->location  = $request->input('location');
         $company->industry  = $request->input('industry');
         $company->biz_phase  = $request->input('biz_phase');
+        $company->reg_date  = $request->input('reg_date');
+        $company->num_employees  = $request->input('num_employees');
+        $company->annual_turnover  = $request->input('annual_turnover');
+        $company->monthly_turnover  = $request->input('monthly_turnover');
+        $company->offering  = $request->input('offering');
+        $company->start_date  = $request->input('start_date');
+        $company->premise_start_date  = $request->input('premise_start_date');
+        $company->company_bank  = $request->input('company_bank');
+        $company->card_to_perc  = $request->input('card_to_perc');
+        $company->cash_to_perc  = $request->input('cash_to_perc');
+        $company->eft_to_perc  = $request->input('eft_to_perc');
         $company->save();
 
         return redirect('/'.$id.'/manage-company');
