@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAssessmentsTable extends Migration
+class CreateCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,9 @@ class CreateAssessmentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('assessments', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->integer('category_id');
-            $table->integer('phase_id');
-            $table->string('question_text');
-            $table->char('category', 100);
-            $table->char('phase', 50);
+            $table->string('category_title');
             $table->timestamps();
         });
     }
@@ -31,6 +27,6 @@ class CreateAssessmentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('assessments');
+        Schema::dropIfExists('categories');
     }
 }

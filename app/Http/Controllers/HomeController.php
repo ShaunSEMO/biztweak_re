@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Models\User;
 use App\Models\biz_profile;
+use App\Models\assessment;
+use App\Models\category;
+use DB;
 
 
 class HomeController extends Controller
@@ -93,8 +96,14 @@ class HomeController extends Controller
 
     public function manageCompany($id) {
         $company = biz_profile::find($id);
+        $phase = $company->biz_phase;
         $user = User::find($company->user_id);
-        return view('site.bizProfile.manageCompany', compact(['company', 'user']));
+        // $assessments = DB::table('assessments')->where('phase', $company->biz_phase);
+        $assessments = assessment::where('phase', '=', $company->biz_phase)->get();
+        $curr_category = assessment::where('phase', '=', $company->biz_phase)->first()->category;
+        $categories = category::where('category_title', '=', $curr_category)->get();
+
+        return view('site.bizProfile.manageCompany', compact(['company', 'user', 'phase', 'assessments', 'categories']));
     }
 
     public function editCompany ($id, Request $request) {

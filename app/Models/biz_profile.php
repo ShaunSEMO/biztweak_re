@@ -11,6 +11,11 @@ class biz_profile extends Model
 
     public function biz_owner()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\Models\User', 'user_id');
+    }
+
+    public function phase()
+    {
+        return $this->belongsTo('App\Models\phase', 'phase_id');
     }
 }

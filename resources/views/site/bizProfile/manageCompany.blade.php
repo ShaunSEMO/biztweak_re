@@ -87,14 +87,14 @@
                                 <p>Is your company registered?</p>
                                 @if ($company->registered == 0)
                                     {{ Form::label('registered', 'Yes') }}
-                                    {{ Form::radio('registered', 0) }}
+                                    {{ Form::radio('registered', 1) }}
                                     {{ Form::label('registered', 'No') }}
-                                    {{ Form::radio('registered', 1, true) }}
+                                    {{ Form::radio('registered', 0, true) }}
                                 @elseif($company->registered == 1) 
                                     {{ Form::label('registered', 'Yes') }}
-                                    {{ Form::radio('registered', 0, true) }}
+                                    {{ Form::radio('registered', 1, true) }}
                                     {{ Form::label('registered', 'No') }}
-                                    {{ Form::radio('registered', 1) }}
+                                    {{ Form::radio('registered', 0) }}
                                 @endif
                                 <hr>
                                 <p>Registration Number</p>
@@ -138,8 +138,7 @@
                                     'phase_iv' => 'We are generating revenue, we would like to grow through investment',
                                     'phase_v' => 'I would like to be an entrepreneur but don’t know where to start',
                                 ],
-                                $company->biz_phase,
-                                
+                                $phase,
                                 ['class'=>'form-control']) }}
                                 <hr>
                                 <p>Number of employees</p>
@@ -197,6 +196,35 @@
                 </div>
                 <div class="tab-pane fade" id="assessment" role="tabpanel" aria-labelledby="assessment-tab">
                     <h1>Biz Assessment</h1>
+                    <div class="accordion" id="accordionExample">
+                        @foreach ($categories as $category)
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="heading{{ $category->id }}">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $category->id }}" aria-expanded="true" aria-controls="collapse{{ $category->id }}">
+                                        {{ $category->category_title }}
+                                    </button>
+                                </h2>
+                                <div id="collapse{{ $category->id }}" class="accordion-collapse collapse show" aria-labelledby="heading{{ $category->id }}" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body row">
+                                        @foreach ($category->assessments as $assessment)
+                                            
+                                            <div class="col-md-12">
+                                                <p>{{ $assessment->question_text }}</p>
+                                            </div>
+                                            <div class="col-md-4">
+                                                {{ Form::label('registered', 'Yes') }}
+                                                {{ Form::radio('registered', 0) }}
+
+                                                {{ Form::label('registered', 'No') }}
+                                                {{ Form::radio('registered', 1) }}
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                        
+                      </div>
                 </div>
             </div>
 
