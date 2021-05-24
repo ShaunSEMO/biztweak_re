@@ -58,7 +58,7 @@
                                                     <p>{{ $biz->reg_number }}</p>
                                                 @endif
                                                 <p>{{ $biz->industry }}</p>
-                                                <small>{{ $biz->biz_phase }}</small>
+                                                <small>{{ $biz->phase->phase }}</small>
                                             </div>
                                         </div>
                                     </a>

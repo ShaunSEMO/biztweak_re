@@ -16,6 +16,7 @@ class CreateBizProfilesTable extends Migration
         Schema::create('biz_profiles', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
+            $table->integer('phase_id');
             $table->char('name', 200);
             $table->string('logo')->nullable();
             $table->boolean('registered');
@@ -23,7 +24,6 @@ class CreateBizProfilesTable extends Migration
             $table->string('reg_date')->nullable();
             $table->string('location');
             $table->string('industry');
-            $table->string('biz_phase');
             $table->bigInteger('num_employees');
             $table->bigInteger('annual_turnover');
             $table->bigInteger('monthly_turnover');

@@ -16,6 +16,11 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('category_title');
+            $table->boolean('phase_i');
+            $table->boolean('phase_ii');
+            $table->boolean('phase_iii');
+            $table->boolean('phase_iv');
+            $table->boolean('phase_v');
             $table->timestamps();
         });
     }
