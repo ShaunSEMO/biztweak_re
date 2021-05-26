@@ -10,6 +10,7 @@ use App\Models\assessment;
 use App\Models\category;
 use App\Models\phase;
 use App\Models\answer;
+use App\Models\biz_score;
 use DB;
 
 
@@ -109,7 +110,7 @@ class HomeController extends Controller
         return view('site.bizProfile.manageCompany', compact(['company', 'user', 'phase', 'assessments', 'categories']));
     }
 
-    public function editCompany ($id, Request $request) {
+    public function editCompany($id, Request $request) {
         $phase_id = phase::where('phase','=', $request->input('biz_phase'))->first()->id;
         $company = biz_profile::find($id);
         $company->phase_id = $phase_id;
@@ -171,7 +172,61 @@ class HomeController extends Controller
     public function reportSumm($company_id) {
         $company = biz_profile::find($company_id);
         $user = User::find($company->user_id);
+        $user_answers = answer::where('user_id','=', $user->id)->get();
+        $phase = $company->phase->phase;
+        $categories = category::where($phase, '=', 1)->get();
+
+
+
+        foreach ($categories as $cate) {
+            if ($cate->category_title == 'Channels' ) {
+                
+            }
+
+            return response($cate);
+
+            foreach ($cate->assessments as $assessment){
+
+                foreach ($user_answers as $answer){
+
+                    
+
+
+
+                    // foreach ($answer->) {
+
+                    // }
+
+                    // if ($answer->assessment_id == $assessment->id){
+                    //     // count(answer where yes) / count(assess. per cat) * 100 / 1
+
+                    //     $match = ['user_id' => $user->id, 'assessment_id' => $assessment->id, 'answer' => 1];
+
+                    //     $parsed_answers = answer::where($match)->get();
+
+                    //     return response($parsed_answers);
+
+                    //     // $yes_answers = $answer;
+
+                    //     // // $score 
+
+                    //     // $biz_score = new biz_score;
+                    //     // $biz_score->user_id = $user->id;
+                    //     // $biz_score->category_id = $cate->id;
+
+                    // }
+                }
+                // return response($answer->assessment_id);                    
+
+            }
+
+            // return view('site.report-summary', compact(['user', 'company', 'phase']));
+            // return response(count($cate->assessments));
+
+        }
         
-        return view('site.report-summary', compact(['company', 'user']));
+
+
+        // return view('site.report-summary', compact(['company', 'user']));
     }
 }

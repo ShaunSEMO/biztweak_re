@@ -97,21 +97,36 @@
       data.addColumn('string', 'Topping');
       data.addColumn('number', 'Slices');
       data.addRows([
-        ['Mushrooms', 3],
-        ['Onions', 1],
-        ['Olives', 1],
-        ['Zucchini', 1],
-        ['Pepperoni', 2]
+        ['Mushrooms', 12],
+        ['', 1],
       ]);
 
+        
+
       // Set chart options
-      var options = {'title':'How Much Pizza I Ate Last Night',
+      var options = {'title':'Customer Relations',
+                     'description':'Customer Relations',
                      'width':400,
-                     'height':300};
+                     'height':300,
+                     legend: 'none',
+                    // pieStartAngle: 135,
+                    tooltip: { trigger: 'none' },
+                    slices: {
+                        // 0: { color: 'yellow' },
+                        1: { color: 'transparent' }
+                    },
+                    animation: {
+                        "startup": true,
+                        duration: 1000,
+                        easing: 'out'
+                    }
+          };
 
       // Instantiate and draw our chart, passing in some options.
       var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
       chart.draw(data, options);
     }
+
+    drawChart();
   </script>
 @endsection
