@@ -215,6 +215,7 @@
                                                     <br>
                                                     {{ Form::hidden('assessment_id_'.$assessment->id, $assessment->id) }}
                                                     {{ Form::hidden('company_id', $company->id) }}
+                                                    {{ Form::hidden('category_id_'.$assessment->id, $assessment->category_id) }}
                                                     {{ Form::label('question'.$assessment->id, 'Yes') }}
                                                     {{ Form::radio('question'.$assessment->id, 0) }}
                                                     {{ Form::label('question'.$assessment->id, 'No') }}

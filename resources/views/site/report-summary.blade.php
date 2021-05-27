@@ -71,7 +71,13 @@
                     Report Summary
                 </div>
                 <div class="card-body">
-                    <div id="chart_div"></div>
+                    <div id="piechart" style="width: 900px; height: 500px;"></div>      
+                    <div id="chart_div"></div>                        
+
+                    @foreach ($scores as $score)
+                        <div id="piechart" style="width: 900px; height: 500px;"></div>       
+                        <div id="chart_div"></div>                        
+                    @endforeach
                 </div>
             </div>
 
@@ -79,7 +85,44 @@
     </div>
 </div>
 
+<div id="score-group">
+    @foreach ($scores as $score)
+        {{-- <div id="{{'score_group_'.$score['id']}}">
+            <input type="hidden" id="{{'category_title'.$score['id']}}" value="{{ $score['category_title'] }}">
+            <input type="hidden" id="score" value="{{ $score['score'] }}">
+        </div> --}}
+
+        <div id="{{'chart_div_'.$score['id']}}"></div>                        
+
+    @endforeach
+</div>
+
+
+
 <script type="text/javascript">
+    var empty_list = [];
+    var score_groups = document.getElementById('score-group').childNodes;
+    var counter = 0;
+
+    for (i = -1; i < score_groups.length; i+=2) {
+
+        counter = i;
+        empty_list.push(score_groups[i]);
+
+        // for (j = 0; j<score_groups[i].length; j++) {
+        //     console.log(score_groups[i].firstChild);
+        // }
+    }
+
+    // console.log(counter);
+    console.log(empty_list)
+    
+</script>
+
+
+<script type="text/javascript">
+
+    // var score_groups = document.getElementById('')
 
     // Load the Visualization API and the corechart package.
     google.charts.load('current', {'packages':['corechart']});
@@ -129,4 +172,33 @@
 
     drawChart();
   </script>
+
+
+@foreach ($scores as $score)
+<script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+      var data = google.visualization.arrayToDataTable([
+        ['Task', 'Assessment results'],
+        ['Channels',     11],
+        ['E-commerce',      2],
+        ['Customer Relations',  7],
+      ]);
+
+      var options = {
+        title: 'Assessment results'
+      };
+
+      var chart = new google.visualization.PieChart(document.getElementById(<?php 'chart_div_'.$score['id']?>));
+
+      chart.draw(data, options);
+    }
+  </script>
+@endforeach
+
+
+  
 @endsection

@@ -14,6 +14,11 @@ class answer extends Model
         return $this->belongsTo('App\Models\assessment', 'assessment_id');
     }
 
+    public function category()
+    {
+        return $this->belongsTo('App\Models\category', 'category_id');
+    }
+
     public function user()
     {
         return $this->belongsTo('App\Models\User', 'user_id');

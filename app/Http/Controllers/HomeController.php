@@ -148,25 +148,42 @@ class HomeController extends Controller
     public function saveAssessment($user_id, Request $request) {
         $assessments = assessment::all();
         $asses_id = [];
-
+        $asses_cate_id = [];
+        $cate_ids = [];
+        $cate_ids_int = [];
 
         foreach ($assessments as $asses){ 
             array_push($asses_id, $asses->id);
+            array_push($asses_cate_id, $asses->category_id);
         }
 
         for ($i = 0; $i < count($asses_id); $i++) {
-            $name = 'assessment_id_'.$asses_id[$i];
+            $id_name = 'assessment_id_'.$asses_id[$i];
             $q_name = 'question'.$asses_id[$i];
+            $cate_name = 'category_id_'.$asses_id[$i];
 
-            if (isset($request->$name)) {
+            if (isset($request->$id_name)) {
                 $answer = new answer;
                 $answer->user_id = $user_id;
+                $answer->category_id = $request->$cate_name;
                 $answer->assessment_id = $asses_id[$i];
                 $answer->answer = $request->$q_name;
                 $answer->save();
+
+                if (in_array($answer->category_id, $cate_ids) == false) {
+                    array_push($cate_ids, $answer->category_id);
+                }
             }
+
         }
-        return redirect('/'.$request->input('company_id').'/manage-company');
+        foreach($cate_ids as $cate_id) {
+            array_push($cate_ids_int,(int)$cate_id);
+        }
+
+
+
+        return response($cate_ids_int);
+        // return redirect('/'.$request->input('company_id').'/manage-company');
     }
 
     public function reportSumm($company_id) {
@@ -174,59 +191,35 @@ class HomeController extends Controller
         $user = User::find($company->user_id);
         $user_answers = answer::where('user_id','=', $user->id)->get();
         $phase = $company->phase->phase;
-        $categories = category::where($phase, '=', 1)->get();
+        // $categories = category::where($phase, '=', 1)->get();
 
+        $scores_category = [];
+        $scores = [];
+        $scores_id_count = 0;
 
-
-        foreach ($categories as $cate) {
-            if ($cate->category_title == 'Channels' ) {
-                
-            }
-
-            return response($cate);
-
-            foreach ($cate->assessments as $assessment){
-
-                foreach ($user_answers as $answer){
-
-                    
-
-
-
-                    // foreach ($answer->) {
-
-                    // }
-
-                    // if ($answer->assessment_id == $assessment->id){
-                    //     // count(answer where yes) / count(assess. per cat) * 100 / 1
-
-                    //     $match = ['user_id' => $user->id, 'assessment_id' => $assessment->id, 'answer' => 1];
-
-                    //     $parsed_answers = answer::where($match)->get();
-
-                    //     return response($parsed_answers);
-
-                    //     // $yes_answers = $answer;
-
-                    //     // // $score 
-
-                    //     // $biz_score = new biz_score;
-                    //     // $biz_score->user_id = $user->id;
-                    //     // $biz_score->category_id = $cate->id;
-
-                    // }
+        foreach ($user_answers as $answer) {
+            $categories = category::where('id', '=', $answer->category_id)->get();
+            foreach ($categories as $category) {
+                if (in_array($category->category_title, $scores_category) == FALSE) {
+                    array_push($scores_category, $category->category_title);
                 }
-                // return response($answer->assessment_id);                    
-
             }
-
-            // return view('site.report-summary', compact(['user', 'company', 'phase']));
-            // return response(count($cate->assessments));
-
         }
+
         
+        foreach ($scores_category as $cate){ 
+            $scores_id_count++;
+            array_push($scores, array(
+                "id"=>$scores_id_count,
+                "category_title"=>$cate,
+                "score"=>37,
+            ));
+        }
 
+        // json_encode($scores);
 
-        // return view('site.report-summary', compact(['company', 'user']));
+        return view('site.report-summary', compact(['user','company', 'scores']));
+        // return response($scores);
+     
     }
 }
