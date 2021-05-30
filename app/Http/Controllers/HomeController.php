@@ -234,11 +234,35 @@ class HomeController extends Controller
         }
 
         foreach($biz_scores as $the_score_js) {
-            array_push();
+            $score_diff = 100 - $the_score_js->score;
+            array_push($charts_js,
+                "<script>
+                google.charts.load('current', {packages:['corechart']});
+                google.charts.setOnLoadCallback(drawChart);
+        
+                function drawChart() {
+        
+                    var data = google.visualization.arrayToDataTable([
+                    ['Category', 'Score'],
+                    ['".$the_score_js->category_title."',     ".$the_score_js->score."],
+                    ['',      ".$score_diff."]
+                    ]);
+        
+                    var options = {
+                        pieHole: 0.3,
+                        'title': '".$the_score_js->category_title."',
+
+                    };
+        
+                    var chart = new google.visualization.PieChart(document.getElementById('chart_".$the_score_js->id."'));
+                    chart.draw(data, options);
+                }
+            </script>"
+            );
         }
 
 
-        return view('site.report-summary', compact(['user','company', 'scores', 'biz_scores', 'cate_scores']));
+        return view('site.report-summary', compact(['user','company', 'scores', 'biz_scores', 'cate_scores', 'charts_js']));
      
     }
 }

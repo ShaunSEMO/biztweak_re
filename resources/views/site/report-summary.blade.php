@@ -71,12 +71,13 @@
                     Report Summary
                 </div>
                 <div class="card-body">
-                    @foreach ($biz_scores as $score)
-                        <div id="{{'chart_'.$score->id}}" style="max-width: 900px; max-height: 500px;"></div>
-                        <h1>Hello</h1>
-                    @endforeach
-                    <div id="pacman" style="max-width: 900px; max-height: 500px;"></div>
-
+                    <div class="row">
+                        @foreach ($biz_scores as $score)
+                            <div class="col-md-6">
+                                <div id="{{'chart_'.$score->id}}" style="max-width: 900px; max-height: 500px;"></div>
+                            </div>
+                        @endforeach
+                    </div>
                     <div id="piechart" style="max-width: 900px; max-height: 500px;"></div>                                                
                 </div>
             </div>
@@ -85,91 +86,9 @@
     </div>
 </div>
 
-@foreach ($biz_scores as $score)
-    <script>
-        google.charts.load("current", {packages:["corechart"]});
-        google.charts.setOnLoadCallback(drawChart);
-
-
-        var cate_scores = {!! json_encode($score) !!};
-
-        console.log(cate_scores.id)
-
-        function drawChart() {
-            // var data = new google.visualization.DataTable();
-
-            // data.addColumn('string', 'Category');
-            // data.addColumn('number', 'Score');
-            // data.addRows([
-            //     ['Category', 'Percentage'],
-            //     [cate_scores[i][1], cate_scores[i][2]],
-            //     ['', 25]
-            // ]);
-
-
-            var data = google.visualization.arrayToDataTable([
-            ['Task', 'Hours per Day'],
-            ['Work',     11],
-            ['Eat',      2],
-            ['Commute',  2],
-            ['Watch TV', 2],
-            ['Sleep',    7]
-            ]);
-
-            var options = {
-                pieHole: 0.3,
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('chart_'.concat(cate_scores.id)));
-            chart.draw(data, options);
-        }
-    </script>
+@foreach ($charts_js as $chart)
+    {!! $chart !!}
 @endforeach
-
-<script type="text/javascript">
-   
-    var cate_scores = {!! json_encode($cate_scores) !!};
-
-
-    for(i = 0; i<cate_scores.length; i++) {
-        google.charts.load("current", {packages:["corechart"]});
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-            // var data = new google.visualization.DataTable();
-
-            // data.addColumn('string', 'Category');
-            // data.addColumn('number', 'Score');
-            // data.addRows([
-            //     ['Category', 'Percentage'],
-            //     [cate_scores[i][1], cate_scores[i][2]],
-            //     ['', 25]
-            // ]);
-
-
-            var data = google.visualization.arrayToDataTable([
-            ['Task', 'Hours per Day'],
-            ['Work',     11],
-            ['Eat',      2],
-            ['Commute',  2],
-            ['Watch TV', 2],
-            ['Sleep',    7]
-            ]);
-
-            var options = {
-                pieHole: 0.3,
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('chart_'.concat(cate_scores[i][0])));
-            chart.draw(data, options);
-        }
-    }
-
-  </script>
-
-
-
-
 
 <script type="text/javascript">
     // ------ Full report ------
