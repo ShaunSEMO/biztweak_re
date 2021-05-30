@@ -71,13 +71,13 @@
                     Report Summary
                 </div>
                 <div class="card-body">
-                    <div id="piechart" style="width: 900px; height: 500px;"></div>      
-                    <div id="chart_div"></div>                        
-
-                    @foreach ($scores as $score)
-                        <div id="piechart" style="width: 900px; height: 500px;"></div>       
-                        <div id="chart_div"></div>                        
+                    @foreach ($biz_scores as $score)
+                        <div id="{{'chart_'.$score->id}}" style="max-width: 900px; max-height: 500px;"></div>
+                        <h1>Hello</h1>
                     @endforeach
+                    <div id="pacman" style="max-width: 900px; max-height: 500px;"></div>
+
+                    <div id="piechart" style="max-width: 900px; max-height: 500px;"></div>                                                
                 </div>
             </div>
 
@@ -85,120 +85,124 @@
     </div>
 </div>
 
-<div id="score-group">
-    @foreach ($scores as $score)
-        {{-- <div id="{{'score_group_'.$score['id']}}">
-            <input type="hidden" id="{{'category_title'.$score['id']}}" value="{{ $score['category_title'] }}">
-            <input type="hidden" id="score" value="{{ $score['score'] }}">
-        </div> --}}
-
-        <div id="{{'chart_div_'.$score['id']}}"></div>                        
-
-    @endforeach
-</div>
+@foreach ($biz_scores as $score)
+    <script>
+        google.charts.load("current", {packages:["corechart"]});
+        google.charts.setOnLoadCallback(drawChart);
 
 
+        var cate_scores = {!! json_encode($score) !!};
 
-<script type="text/javascript">
-    var empty_list = [];
-    var score_groups = document.getElementById('score-group').childNodes;
-    var counter = 0;
+        console.log(cate_scores.id)
 
-    for (i = -1; i < score_groups.length; i+=2) {
+        function drawChart() {
+            // var data = new google.visualization.DataTable();
 
-        counter = i;
-        empty_list.push(score_groups[i]);
-
-        // for (j = 0; j<score_groups[i].length; j++) {
-        //     console.log(score_groups[i].firstChild);
-        // }
-    }
-
-    // console.log(counter);
-    console.log(empty_list)
-    
-</script>
+            // data.addColumn('string', 'Category');
+            // data.addColumn('number', 'Score');
+            // data.addRows([
+            //     ['Category', 'Percentage'],
+            //     [cate_scores[i][1], cate_scores[i][2]],
+            //     ['', 25]
+            // ]);
 
 
-<script type="text/javascript">
+            var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+            ['Work',     11],
+            ['Eat',      2],
+            ['Commute',  2],
+            ['Watch TV', 2],
+            ['Sleep',    7]
+            ]);
 
-    // var score_groups = document.getElementById('')
+            var options = {
+                pieHole: 0.3,
+            };
 
-    // Load the Visualization API and the corechart package.
-    google.charts.load('current', {'packages':['corechart']});
-
-    // Set a callback to run when the Google Visualization API is loaded.
-    google.charts.setOnLoadCallback(drawChart);
-
-    // Callback that creates and populates a data table,
-    // instantiates the pie chart, passes in the data and
-    // draws it.
-    function drawChart() {
-
-      // Create the data table.
-      var data = new google.visualization.DataTable();
-      data.addColumn('string', 'Topping');
-      data.addColumn('number', 'Slices');
-      data.addRows([
-        ['Mushrooms', 12],
-        ['', 1],
-      ]);
-
-        
-
-      // Set chart options
-      var options = {'title':'Customer Relations',
-                     'description':'Customer Relations',
-                     'width':400,
-                     'height':300,
-                     legend: 'none',
-                    // pieStartAngle: 135,
-                    tooltip: { trigger: 'none' },
-                    slices: {
-                        // 0: { color: 'yellow' },
-                        1: { color: 'transparent' }
-                    },
-                    animation: {
-                        "startup": true,
-                        duration: 1000,
-                        easing: 'out'
-                    }
-          };
-
-      // Instantiate and draw our chart, passing in some options.
-      var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-      chart.draw(data, options);
-    }
-
-    drawChart();
-  </script>
-
-
-@foreach ($scores as $score)
-<script type="text/javascript">
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
-
-    function drawChart() {
-
-      var data = google.visualization.arrayToDataTable([
-        ['Task', 'Assessment results'],
-        ['Channels',     11],
-        ['E-commerce',      2],
-        ['Customer Relations',  7],
-      ]);
-
-      var options = {
-        title: 'Assessment results'
-      };
-
-      var chart = new google.visualization.PieChart(document.getElementById(<?php 'chart_div_'.$score['id']?>));
-
-      chart.draw(data, options);
-    }
-  </script>
+            var chart = new google.visualization.PieChart(document.getElementById('chart_'.concat(cate_scores.id)));
+            chart.draw(data, options);
+        }
+    </script>
 @endforeach
 
+<script type="text/javascript">
+   
+    var cate_scores = {!! json_encode($cate_scores) !!};
+
+
+    for(i = 0; i<cate_scores.length; i++) {
+        google.charts.load("current", {packages:["corechart"]});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            // var data = new google.visualization.DataTable();
+
+            // data.addColumn('string', 'Category');
+            // data.addColumn('number', 'Score');
+            // data.addRows([
+            //     ['Category', 'Percentage'],
+            //     [cate_scores[i][1], cate_scores[i][2]],
+            //     ['', 25]
+            // ]);
+
+
+            var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+            ['Work',     11],
+            ['Eat',      2],
+            ['Commute',  2],
+            ['Watch TV', 2],
+            ['Sleep',    7]
+            ]);
+
+            var options = {
+                pieHole: 0.3,
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('chart_'.concat(cate_scores[i][0])));
+            chart.draw(data, options);
+        }
+    }
+
+  </script>
+
+
+
+
+
+<script type="text/javascript">
+    // ------ Full report ------
+
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+      var data = new google.visualization.DataTable();
+
+      var data_set = {!! json_encode($scores) !!};
+
+
+      data.addColumn('string', 'Category');
+      data.addColumn('number', 'Score');
+      data.addRows(data_set);
+
+      var options = {
+        // pieHole: 0.2,
+        'title': 'Assessment results',
+        animation: {
+            "startup": true,
+            duration: 1000,
+            easing: 'out'
+        }
+      };
+
+      var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+      chart.draw(data, options);
+    }
+  </script>
 
   
 @endsection

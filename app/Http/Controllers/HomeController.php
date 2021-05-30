@@ -151,6 +151,9 @@ class HomeController extends Controller
         $asses_cate_id = [];
         $cate_ids = [];
         $cate_ids_int = [];
+        $answers_per_cate_count = [];
+        $yes_answers_per_cate_count = [];
+        $score = null;
 
         foreach ($assessments as $asses){ 
             array_push($asses_id, $asses->id);
@@ -180,46 +183,62 @@ class HomeController extends Controller
             array_push($cate_ids_int,(int)$cate_id);
         }
 
+        foreach($cate_ids_int as $int){
+            array_push(
+            $answers_per_cate_count, 
+            count(answer::where([
+                ['user_id', '=', $user_id],
+                ['category_id', '=', $int]
+            ])->get())
+            );
 
+            array_push(
+                $yes_answers_per_cate_count, 
+                count(answer::where([
+                    ['user_id', '=', $user_id],
+                    ['category_id', '=', $int],
+                    ['answer', '=', 1]
+                ])->get())
+                );
 
-        return response($cate_ids_int);
-        // return redirect('/'.$request->input('company_id').'/manage-company');
+            foreach($answers_per_cate_count as $answer_count) {
+                foreach($yes_answers_per_cate_count as $yes_answer_count) {
+                    $score = $yes_answer_count / $answer_count * 100;
+
+                    $biz_score = new biz_score;
+                    $biz_score->user_id = $user_id;
+                    $biz_score->category_id = $int;
+                    $biz_score->category_title = category::where('id', '=', $int)->first()->category_title;
+                    $biz_score->score = $score;
+
+                }
+            }
+            $biz_score->save();
+        }
+
+        // return response($answers_per_cate_count);
+        return redirect('/'.$request->input('company_id').'/report-summary');
     }
 
     public function reportSumm($company_id) {
         $company = biz_profile::find($company_id);
         $user = User::find($company->user_id);
-        $user_answers = answer::where('user_id','=', $user->id)->get();
-        $phase = $company->phase->phase;
-        // $categories = category::where($phase, '=', 1)->get();
-
-        $scores_category = [];
+        $biz_scores = biz_score::where('user_id', '=', $user->id)->get();
         $scores = [];
-        $scores_id_count = 0;
+        $cate_scores = [];
+        $charts_js = [];
 
-        foreach ($user_answers as $answer) {
-            $categories = category::where('id', '=', $answer->category_id)->get();
-            foreach ($categories as $category) {
-                if (in_array($category->category_title, $scores_category) == FALSE) {
-                    array_push($scores_category, $category->category_title);
-                }
-            }
+        foreach ($biz_scores as $the_score) {
+            array_push($scores, [$the_score->category_title, $the_score->score]);
+            array_push($cate_scores, [$the_score->id, $the_score->category_title, $the_score->score]);
         }
 
-        
-        foreach ($scores_category as $cate){ 
-            $scores_id_count++;
-            array_push($scores, array(
-                "id"=>$scores_id_count,
-                "category_title"=>$cate,
-                "score"=>37,
-            ));
+        foreach($biz_scores as $the_score_js) {
+            array_push();
         }
 
-        // json_encode($scores);
 
-        return view('site.report-summary', compact(['user','company', 'scores']));
-        // return response($scores);
+        return view('site.report-summary', compact(['user','company', 'scores', 'biz_scores', 'cate_scores']));
      
     }
 }

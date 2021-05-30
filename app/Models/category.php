@@ -13,4 +13,9 @@ class category extends Model
     {
         return $this->hasMany('App\Models\assessment', 'category_id');
     }
+
+    public function biz_scores()
+    {
+        return $this->hasMany('App\Models\biz_score', 'category_id');
+    }
 }
