@@ -5,22 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class assessment extends Model
+class biz_score extends Model
 {
     use HasFactory;
-
-    public function answers()
+    public function user()
     {
-        return $this->hasMany('App\Models\answer', 'assessment_id');
+        return $this->belongsTo('App\Models\User', 'user_id');
     }
 
     public function category()
     {
         return $this->belongsTo('App\Models\category', 'category_id');
-    }
-
-    public function phase()
-    {
-        return $this->belongsTo('App\Models\phase', 'phase_id');
     }
 }

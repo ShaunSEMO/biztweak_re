@@ -87,14 +87,14 @@
                                 <p>Is your company registered?</p>
                                 @if ($company->registered == 0)
                                     {{ Form::label('registered', 'Yes') }}
-                                    {{ Form::radio('registered', 0) }}
+                                    {{ Form::radio('registered', 1) }}
                                     {{ Form::label('registered', 'No') }}
-                                    {{ Form::radio('registered', 1, true) }}
+                                    {{ Form::radio('registered', 0, true) }}
                                 @elseif($company->registered == 1) 
                                     {{ Form::label('registered', 'Yes') }}
-                                    {{ Form::radio('registered', 0, true) }}
+                                    {{ Form::radio('registered', 1, true) }}
                                     {{ Form::label('registered', 'No') }}
-                                    {{ Form::radio('registered', 1) }}
+                                    {{ Form::radio('registered', 0) }}
                                 @endif
                                 <hr>
                                 <p>Registration Number</p>
@@ -138,8 +138,7 @@
                                     'phase_iv' => 'We are generating revenue, we would like to grow through investment',
                                     'phase_v' => 'I would like to be an entrepreneur but don’t know where to start',
                                 ],
-                                $company->biz_phase,
-                                
+                                $phase,
                                 ['class'=>'form-control']) }}
                                 <hr>
                                 <p>Number of employees</p>
@@ -197,6 +196,41 @@
                 </div>
                 <div class="tab-pane fade" id="assessment" role="tabpanel" aria-labelledby="assessment-tab">
                     <h1>Biz Assessment</h1>
+                    <div class="accordion" id="accordionExample">
+                        {!! Form::open(['action' => ['App\Http\Controllers\HomeController@saveAssessment', $user->id], 'files' => true, 'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
+                        @foreach ($categories as $category)
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="heading{{ $category->id }}">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $category->id }}" aria-expanded="true" aria-controls="collapse{{ $category->id }}">
+                                        {{ $category->category_title }}
+                                    </button>
+                                </h2>
+                                <div id="collapse{{ $category->id }}" class="accordion-collapse collapse show" aria-labelledby="heading{{ $category->id }}" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body row">
+                                            @foreach ($category->assessments as $assessment)
+                                                <div class="col-md-8">
+                                                    <p>{{ $assessment->question_text }}</p>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <br>
+                                                    {{ Form::hidden('assessment_id_'.$assessment->id, $assessment->id) }}
+                                                    {{ Form::hidden('company_id', $company->id) }}
+                                                    {{ Form::hidden('category_id_'.$assessment->id, $assessment->category_id) }}
+                                                    {{ Form::label('question'.$assessment->id, 'Yes') }}
+                                                    {{ Form::radio('question'.$assessment->id, 0) }}
+                                                    {{ Form::label('question'.$assessment->id, 'No') }}
+                                                    {{ Form::radio('question'.$assessment->id, 1) }}
+                                                    <br>
+                                                </div>
+                                            @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                        {{ Form::submit('Save', ['class' => 'btn btn-primary std-btn']) }}
+                        {!! Form::close() !!}
+                        <a href="{{ url($company->id.'/report-summary') }}" class="btn btn-primary"><i class="fas fa-chart-pie">Report Summary</i></a>
+                      </div>
                 </div>
             </div>
 

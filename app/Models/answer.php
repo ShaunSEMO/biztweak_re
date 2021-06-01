@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class assessment extends Model
+class answer extends Model
 {
     use HasFactory;
 
-    public function answers()
+    public function assessment_q()
     {
-        return $this->hasMany('App\Models\answer', 'assessment_id');
+        return $this->belongsTo('App\Models\assessment', 'assessment_id');
     }
 
     public function category()
@@ -19,8 +19,8 @@ class assessment extends Model
         return $this->belongsTo('App\Models\category', 'category_id');
     }
 
-    public function phase()
+    public function user()
     {
-        return $this->belongsTo('App\Models\phase', 'phase_id');
+        return $this->belongsTo('App\Models\User', 'user_id');
     }
 }

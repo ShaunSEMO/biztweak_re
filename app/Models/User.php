@@ -47,7 +47,17 @@ class User extends Authenticatable
 
     public function biz_profiles()
     {
-        return $this->hasMany('App\Models\biz_profile');
+        return $this->hasMany('App\Models\biz_profile', 'user_id');
+    }
+
+    public function answers()
+    {
+        return $this->hasMany('App\Models\answer', 'user_id');
+    }
+
+    public function biz_scores()
+    {
+        return $this->hasMany('App\Models\biz_score', 'user_id');
     }
     
 }
