@@ -244,12 +244,17 @@ class HomeController extends Controller
         
                     var data = google.visualization.arrayToDataTable([
                     ['Category', 'Score'],
-                    ['".$the_score_js->category_title."',     ".$the_score_js->score."],
-                    ['',      ".$score_diff."]
+                    ['Positive',     ".$the_score_js->score."],
+                    ['Negative',      ".$score_diff."]
                     ]);
         
                     var options = {
                         pieHole: 0.3,
+                        animation:{
+                            'startup': true,
+                            duration: 1000,
+                            easing: 'out',
+                          },
                         'title': '".$the_score_js->category_title."',
 
                     };
@@ -264,5 +269,17 @@ class HomeController extends Controller
 
         return view('site.report-summary', compact(['user','company', 'scores', 'biz_scores', 'cate_scores', 'charts_js']));
      
+    }
+
+    public function fullReport($company_id) {
+        $company = biz_profile::find($company_id);
+        $user = User::find($company->id);      
+
+        return view('site.full-report', compact(['user', 'company']));
+    }
+
+
+    public function add_group_cate() {
+        
     }
 }

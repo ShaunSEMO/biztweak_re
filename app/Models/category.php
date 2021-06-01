@@ -18,4 +18,9 @@ class category extends Model
     {
         return $this->hasMany('App\Models\biz_score', 'category_id');
     }
+
+    public function cate_group()
+    {
+        return $this->belongsTo('App\Models\cate_groups');
+    }
 }

@@ -32,9 +32,7 @@
                     <h2>{{ $user->name }}</h2>
                     @if ($user->user_type = 3)
                         <p>Entrepreneur</p>
-                    @endif
-                    <br>
-                    <a href="{{ url('/'.$company->id.'/full-report') }}" class="btn btn-primary">Full Report</a>                                       
+                    @endif                                      
                 </div>
             </div>
         </div>
@@ -70,17 +68,10 @@
             <hr>
             <div class="card">
                 <div class="card-header">
-                    Report Summary
+                    Full Report
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        @foreach ($biz_scores as $score)
-                            <div class="col-md-6">
-                                <div id="{{'chart_'.$score->id}}" style="max-width: 900px; max-height: 500px;"></div>
-                            </div>
-                        @endforeach
-                    </div>
-                    <div id="piechart" style="max-width: 900px; max-height: 500px;"></div>       
+                    <h3>Hello World</h3>      
                 </div>
             </div>
 
@@ -88,11 +79,8 @@
     </div>
 </div>
 
-@foreach ($charts_js as $chart)
-    {!! $chart !!}
-@endforeach
 
-<script type="text/javascript">
+{{-- <script type="text/javascript">
     // ------ Full report ------
 
     google.charts.load('current', {'packages':['corechart']});
@@ -123,7 +111,7 @@
 
       chart.draw(data, options);
     }
-  </script>
+  </script> --}}
 
   
 @endsection

@@ -28,3 +28,4 @@ Route::get('/{id}/manage-company', [App\Http\Controllers\HomeController::class, 
 Route::put('/{id}/edit-company', [App\Http\Controllers\HomeController::class, 'editCompany'])->name('editCompany');
 Route::post('/{user_id}/save-assessment', [App\Http\Controllers\HomeController::class, 'saveAssessment'])->name('saveAssessment');
 Route::get('/{company_id}/report-summary', [App\Http\Controllers\HomeController::class, 'reportSumm'])->name('reportSumm');
+Route::get('/{company_id}/full-report', [App\Http\Controllers\HomeController::class, 'fullReport'])->name('fullReport');
