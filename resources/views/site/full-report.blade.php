@@ -71,7 +71,30 @@
                     Full Report
                 </div>
                 <div class="card-body">
-                    <h3>Hello World</h3>      
+                    <div class="accordion" id="accordionExample">
+
+                        @foreach ($cate_groups as $group)
+                            <div class="accordion-item">
+                                <h1 class="accordion-header" id="{{ 'heading'.$group->id}}">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="{{'#collapse'.$group->id}}" aria-expanded="true" aria-controls="collapseOne">
+                                    {{ $group->cate_group_title }}
+                                </button>
+                                </h1>
+                                <div id="{{'collapse'.$group->id}}" class="accordion-collapse collapse show" aria-labelledby="{{ 'heading'.$group->id}}" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <div id="chart_div"></div>
+                                        <hr>
+                                        <h3>Business Diagnosis</h3>
+                                        <ul class="list-group">
+                                            <li class="list-group-item">Channels</li>
+                                            <li class="list-group-item">Value Proposition</li>
+                                            <li class="list-group-item">E-commerce</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                      </div>     
                 </div>
             </div>
 
@@ -79,39 +102,52 @@
     </div>
 </div>
 
+<script>
 
-{{-- <script type="text/javascript">
-    // ------ Full report ------
+google.charts.load('current', {packages: ['corechart', 'bar']});
+google.charts.setOnLoadCallback(drawAnnotations);
 
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
+function drawAnnotations() {
+      var data = google.visualization.arrayToDataTable([
+        ['Category', 'Advantages', 'Dissadvantages'],
+        ['Channels', 56, 44],
+        ['Functional Capabilities', 87, 13],
+        ['Business and Customers', 23, 73],
+        ['E-commerce', 45, 55],
+      ]);
 
-    function drawChart() {
-
-      var data = new google.visualization.DataTable();
-
-      var data_set = {!! json_encode($scores) !!};
-
-
-      data.addColumn('string', 'Category');
-      data.addColumn('number', 'Score');
-      data.addRows(data_set);
 
       var options = {
-        // pieHole: 0.2,
-        'title': 'Assessment results',
-        animation: {
-            "startup": true,
-            duration: 1000,
-            easing: 'out'
+        title: 'Best Performing Areas',
+        annotations: {
+          alwaysOutside: true,
+          textStyle: {
+            fontSize: 12,
+            auraColor: 'none',
+            color: '#555'
+          },
+          boxStyle: {
+            stroke: '#ccc',
+            strokeWidth: 1,
+            gradient: {
+              color1: '#f3e5f5',
+              color2: '#f3e5f5',
+              x1: '0%', y1: '0%',
+              x2: '100%', y2: '100%'
+            }
+          }
+        },
+        hAxis: {
+          title: 'Total Population',
+          minValue: 0,
+        },
+        vAxis: {
+          title: 'City'
         }
       };
-
-      var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
+      var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
       chart.draw(data, options);
     }
-  </script> --}}
-
+</script>
   
 @endsection
