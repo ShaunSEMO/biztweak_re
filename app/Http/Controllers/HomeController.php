@@ -11,6 +11,7 @@ use App\Models\category;
 use App\Models\phase;
 use App\Models\answer;
 use App\Models\biz_score;
+use App\Models\cate_groups;
 use DB;
 
 
@@ -237,7 +238,7 @@ class HomeController extends Controller
             $score_diff = 100 - $the_score_js->score;
             array_push($charts_js,
                 "<script>
-                google.charts.load('current', {packages:['corechart']});
+                google.charts.load('current', {packages:['corechart', 'bar']});
                 google.charts.setOnLoadCallback(drawChart);
         
                 function drawChart() {
@@ -273,13 +274,26 @@ class HomeController extends Controller
 
     public function fullReport($company_id) {
         $company = biz_profile::find($company_id);
-        $user = User::find($company->id);      
+        $user = User::find($company->id);   
+        $cate_groups = cate_groups::all();
 
-        return view('site.full-report', compact(['user', 'company']));
+        return view('site.full-report', compact(['user', 'company', 'cate_groups']));
     }
 
+    // public function foo_bar() {
+    //     $concept_cates = [72, 65, 62, 61, 68, 73, 75, 82, 74,87, 83,80, 63];
+    //     $structure_cates = [85, 67, 69, 86, 64, 66, 84, 71, 70, 81, 78, 79, 60];
 
-    public function add_group_cate() {
-        
-    }
+    //     $categories = category::all();
+
+    //     foreach($categories as $category) {
+    //         if(in_array($category->id, $concept_cates)) {
+    //             $category->cate_id = 1;
+    //             $category->save();
+    //         } elseif(in_array($category->id, $structure_cates)) {
+    //             $category->cate_id = 2;
+    //             $category->save();
+    //         }
+    //     }
+    // }
 }
