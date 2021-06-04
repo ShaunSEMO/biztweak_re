@@ -15,6 +15,8 @@ class CreateAssessFieldsTable extends Migration
     {
         Schema::create('assess_fields', function (Blueprint $table) {
             $table->id();
+            $table->string('field_name');
+            $table->bigInteger('field_score');
             $table->timestamps();
         });
     }

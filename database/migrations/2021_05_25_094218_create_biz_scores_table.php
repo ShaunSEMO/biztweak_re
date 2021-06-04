@@ -17,6 +17,7 @@ class CreateBizScoresTable extends Migration
             $table->id();
             $table->integer('user_id');
             $table->integer('category_id');
+            $table->integer('group_id');
             $table->string('category_title');
             $table->integer('score');
             $table->timestamps();

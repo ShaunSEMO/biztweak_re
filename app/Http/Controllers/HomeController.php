@@ -209,6 +209,7 @@ class HomeController extends Controller
                     $biz_score = new biz_score;
                     $biz_score->user_id = $user_id;
                     $biz_score->category_id = $int;
+                    $biz_score->group_id = category::where('id', '=', $int)->first()->group_id;
                     $biz_score->category_title = category::where('id', '=', $int)->first()->category_title;
                     $biz_score->score = $score;
 
@@ -228,6 +229,16 @@ class HomeController extends Controller
         $scores = [];
         $cate_scores = [];
         $charts_js = [];
+
+        $biz_viability_list = ['Value proposition','Customer segments', 'Proof of concept','delivery expertise', 'market intelligence','revenue streams','key activities', 'cost structure', 'functional capability', 'key resources', 'financial management'];
+        $customer_revenue_list = ['customer relationships', 'channels', 'customer segments', 'customers', 'business and customers','marketing and sales', 'revenue streams'];
+        $market_viability_list = ['Market intelligence', 'delivery expertise', 'business and customers', 'ownership and mindset', 'marketing and sales', 'value proposition', 'key activities', 'customer segments', 'e-commerce'];
+        $investor_readiness_list = ['value proposition','customer segments', 'proof of concept', 'minimum viable product', 'channels', 'revenue streams', 'cost structure', 'unique selling point', 'employees', 'turnover', 'marketing and sales', 'ownership and mindset','business and customers','growth strategy', 'financial management', 'compliance and certification', 'legal', 'commercial contract agreements'];
+        $scale_viability_list = ['current alternatives','channels', 'key partners', 'cost structure', 'customer relationships', 'business process management','marketing and sales', 'employee satifaction', 'growth strategy', 'delivery expertise', 'market intelligence', 'financial management'];
+        $employee_performance_list = ['business process management', 'ownership and mindset','employee satisfaction'];
+        $financial_list = ['cost structure', 'financial management', 'revenue streams', 'e-commerce'];
+
+
 
         foreach ($biz_scores as $the_score) {
             array_push($scores, [$the_score->category_title, $the_score->score]);
@@ -276,6 +287,7 @@ class HomeController extends Controller
         $company = biz_profile::find($company_id);
         $user = User::find($company->id);   
         $cate_groups = cate_groups::all();
+        
 
         return view('site.full-report', compact(['user', 'company', 'cate_groups']));
     }

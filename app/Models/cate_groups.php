@@ -11,7 +11,7 @@ class cate_groups extends Model
 
     public function categories()
     {
-        return $this->hasMany('App\Models\category', 'cate_id');
+        return $this->hasMany('App\Models\category', 'group_id');
     }
 
 }
