@@ -12,6 +12,8 @@ use App\Models\phase;
 use App\Models\answer;
 use App\Models\biz_score;
 use App\Models\cate_groups;
+use App\Models\assess_field;
+use App\Models\field_score;
 use DB;
 
 
@@ -156,6 +158,48 @@ class HomeController extends Controller
         $yes_answers_per_cate_count = [];
         $score = null;
 
+        $biz_viability = new field_score;
+        $biz_viability->user_id = $user_id;
+        $biz_viability->field_name = "Biz viability";
+        $biz_viability->field_score = 0;
+        $biz_viability->save();
+
+        $customer_revenue = new field_score;
+        $customer_revenue->user_id = $user_id;
+        $customer_revenue->field_name = "Get customers and revenue";
+        $customer_revenue->field_score = 0;
+        $customer_revenue->save();
+
+        $market_viability = new field_score;
+        $market_viability->user_id = $user_id;
+        $market_viability->field_name = "Market viability";
+        $market_viability->field_score = 0;
+        $market_viability->save();
+        
+        $investor_readiness = new field_score;
+        $investor_readiness->user_id = $user_id;
+        $investor_readiness->field_name = "Investor readiness";
+        $investor_readiness->field_score = 0;
+        $investor_readiness->save();
+
+        $scale_viability = new field_score;
+        $scale_viability->user_id = $user_id;
+        $scale_viability->field_name = "Scale viability";
+        $scale_viability->field_score = 0;
+        $scale_viability->save();
+
+        $employee_performance = new field_score;
+        $employee_performance->user_id = $user_id;
+        $employee_performance->field_name = "Employee performance";
+        $employee_performance->field_score = 0;
+        $employee_performance->save();
+
+        $financial = new field_score;
+        $financial->user_id = $user_id;
+        $financial->field_name = "Financial";
+        $financial->field_score = 0;
+        $financial->save();
+
         foreach ($assessments as $asses){ 
             array_push($asses_id, $asses->id);
             array_push($asses_cate_id, $asses->category_id);
@@ -211,6 +255,7 @@ class HomeController extends Controller
                     $biz_score->category_id = $int;
                     $biz_score->group_id = category::where('id', '=', $int)->first()->group_id;
                     $biz_score->category_title = category::where('id', '=', $int)->first()->category_title;
+                    $biz_score->field_id = category::where('id', '=', $int)->first()->field_id;
                     $biz_score->score = $score;
 
                 }
@@ -218,17 +263,7 @@ class HomeController extends Controller
             $biz_score->save();
         }
 
-        // return response($answers_per_cate_count);
-        return redirect('/'.$request->input('company_id').'/report-summary');
-    }
-
-    public function reportSumm($company_id) {
-        $company = biz_profile::find($company_id);
-        $user = User::find($company->user_id);
-        $biz_scores = biz_score::where('user_id', '=', $user->id)->get();
-        $scores = [];
-        $cate_scores = [];
-        $charts_js = [];
+        $biz_scores = biz_score::where('user_id', '=', $user_id)->get();
 
         $biz_viability_list = ['Value proposition','Customer segments', 'Proof of concept','delivery expertise', 'market intelligence','revenue streams','key activities', 'cost structure', 'functional capability', 'key resources', 'financial management'];
         $customer_revenue_list = ['customer relationships', 'channels', 'customer segments', 'customers', 'business and customers','marketing and sales', 'revenue streams'];
@@ -237,15 +272,147 @@ class HomeController extends Controller
         $scale_viability_list = ['current alternatives','channels', 'key partners', 'cost structure', 'customer relationships', 'business process management','marketing and sales', 'employee satifaction', 'growth strategy', 'delivery expertise', 'market intelligence', 'financial management'];
         $employee_performance_list = ['business process management', 'ownership and mindset','employee satisfaction'];
         $financial_list = ['cost structure', 'financial management', 'revenue streams', 'e-commerce'];
+        $field_list = ['biz viability', 'Get customers and revenue', 'market viability', 'investor readiness', 'scale viability', 'employee performance', 'financial'];
 
+        // Save biz viability scores
+        $biz_viability_scores = [];
+        foreach($biz_viability_list as $item) {
+                foreach($biz_scores as $score){
+                    if (strtolower($item) == strtolower($score->category_title) ) {
+                        array_push($biz_viability_scores, $score->score); 
+                    }
+                }
+        }
+        $biz_viability = field_score::where('user_id', '=', $user_id)->where('field_name', '=', 'Biz viability')->first();
+        if (count($biz_viability_scores)!= 0) {
+            $biz_viability->field_score = (array_sum($biz_viability_scores) / (count($biz_viability_scores) * 100)) * 100;
+        } else {
+            $biz_viability->field_score = 0;
+        }
+        $biz_viability->save();
 
+        // Save customer and revenue scores
+        $customer_revenue_scores = [];
+        foreach($customer_revenue_list as $item) {
+                foreach($biz_scores as $score){
+                    if (strtolower($item) == strtolower($score->category_title) ) {
+                        array_push($customer_revenue_scores, $score->score); 
+                    }
+                }
+        }
+        $customer_revenue = field_score::where('user_id', '=', $user_id)->where('field_name', '=', 'Get customers and revenue')->first();
+        if (count($customer_revenue_scores)!= 0) {
+            $customer_revenue->field_score = (array_sum($customer_revenue_scores) / (count($customer_revenue_scores) * 100)) * 100;
+        } else {
+            $customer_revenue->field_score = 0;
+        }
+        $customer_revenue->save();
 
-        foreach ($biz_scores as $the_score) {
+        // Save market viability scores
+        $market_viability_scores = [];
+        foreach($market_viability_list as $item) {
+                foreach($biz_scores as $score){
+                    if (strtolower($item) == strtolower($score->category_title) ) {
+                        array_push($market_viability_scores, $score->score); 
+                    }
+                }
+        }
+        $market_viability = field_score::where('user_id', '=', $user_id)->where('field_name', '=', 'Market viability')->first();
+    
+        if (count($market_viability_scores)!= 0) {
+            $market_viability->field_score = (array_sum($market_viability_scores) / (count($market_viability_scores) * 100)) * 100;
+        } else {
+            $market_viability->field_score = 0;
+        }
+        $market_viability->save();
+
+        // Save investor readiness scores
+        $investor_readiness_scores = [];
+        foreach($investor_readiness_list as $item) {
+                foreach($biz_scores as $score){
+                    if (strtolower($item) == strtolower($score->category_title) ) {
+                        array_push($investor_readiness_scores, $score->score); 
+                    }
+                }
+        }
+        $investor_readiness = field_score::where('user_id', '=', $user_id)->where('field_name', '=', 'Investor readiness')->first();
+        if (count($investor_readiness_scores)!= 0) {
+            $investor_readiness->field_score = (array_sum($investor_readiness_scores) / (count($investor_readiness_scores) * 100)) * 100;
+        } else {
+            $investor_readiness->field_score = 0;
+        }
+        $investor_readiness->save();
+
+        // Save scale viability scores
+        $scale_viability_scores = [];
+        foreach($scale_viability_list as $item) {
+                foreach($biz_scores as $score){
+                    if (strtolower($item) == strtolower($score->category_title) ) {
+                        array_push($scale_viability_scores, $score->score); 
+                    }
+                }
+        }
+        $scale_viability = field_score::where('user_id', '=', $user_id)->where('field_name', '=', 'Scale viability')->first();
+        if (count($scale_viability_scores)!= 0) {
+            $scale_viability->field_score = (array_sum($scale_viability_scores) / (count($scale_viability_scores) * 100)) * 100;
+        } else {
+            $scale_viability->field_score = 0;
+        }
+        $scale_viability->save();
+
+        // Save employee performance scores
+        $employee_performance_scores = [];
+        foreach($employee_performance_list as $item) {
+                foreach($biz_scores as $score){
+                    if (strtolower($item) == strtolower($score->category_title) ) {
+                        array_push($employee_performance_scores, $score->score); 
+                    }
+                }
+        }
+        $employee_performance = field_score::where('user_id', '=', $user_id)->where('field_name', '=', 'Employee performance')->first();
+        if (count($employee_performance_scores)!= 0) {
+            $employee_performance->field_score = (array_sum($employee_performance_scores) / (count($employee_performance_scores) * 100)) * 100;
+        } else {
+            $employee_performance->field_score = 0;
+        }
+        $employee_performance->save();
+
+        // Save finance scores
+        $financial_scores = [];
+        foreach($financial_list as $item) {
+                foreach($biz_scores as $score){
+                    if (strtolower($item) == strtolower($score->category_title) ) {
+                        array_push($financial_scores, $score->score); 
+                    }
+                }
+        }
+        $financial = field_score::where('user_id', '=', $user_id)->where('field_name', '=', 'Financial')->first();
+        if (count($financial_scores)!= 0) {
+            $financial->field_score = (array_sum($financial_scores) / (count($financial_scores) * 100)) * 100;
+        } else {
+            $financial->field_score = 0;
+        }
+        $financial->save();
+
+        // return response($biz_viability_scores);
+        return redirect('/'.$request->input('company_id').'/report-summary');
+    }
+
+    public function reportSumm($company_id) {
+        $company = biz_profile::find($company_id);
+        $user = User::find($company->user_id);
+        $biz_scores = biz_score::where('user_id', '=', $user->id)->get();
+        $field_scores = field_score::where('user_id', '=', $user->id)->get();
+        $scores = [];
+        $cate_scores = [];
+        $charts_js = [];
+
+        foreach ($field_scores as $the_score) {
             array_push($scores, [$the_score->category_title, $the_score->score]);
             array_push($cate_scores, [$the_score->id, $the_score->category_title, $the_score->score]);
         }
 
-        foreach($biz_scores as $the_score_js) {
+        foreach($field_scores as $the_score_js) {
             $score_diff = 100 - $the_score_js->score;
             array_push($charts_js,
                 "<script>
@@ -256,7 +423,7 @@ class HomeController extends Controller
         
                     var data = google.visualization.arrayToDataTable([
                     ['Category', 'Score'],
-                    ['Positive',     ".$the_score_js->score."],
+                    ['Positive',     ".$the_score_js->field_score."],
                     ['Negative',      ".$score_diff."]
                     ]);
         
@@ -267,7 +434,7 @@ class HomeController extends Controller
                             duration: 1000,
                             easing: 'out',
                           },
-                        'title': '".$the_score_js->category_title."',
+                        'title': '".$the_score_js->field_name."',
 
                     };
         
@@ -279,8 +446,8 @@ class HomeController extends Controller
         }
 
 
-        return view('site.report-summary', compact(['user','company', 'scores', 'biz_scores', 'cate_scores', 'charts_js']));
-     
+        // return response($field_scores);
+        return view('site.report-summary', compact(['user','company', 'scores', 'biz_scores', 'cate_scores', 'charts_js', 'field_scores']));
     }
 
     public function fullReport($company_id) {
@@ -292,20 +459,104 @@ class HomeController extends Controller
         return view('site.full-report', compact(['user', 'company', 'cate_groups']));
     }
 
-    // public function foo_bar() {
-    //     $concept_cates = [72, 65, 62, 61, 68, 73, 75, 82, 74,87, 83,80, 63];
-    //     $structure_cates = [85, 67, 69, 86, 64, 66, 84, 71, 70, 81, 78, 79, 60];
+    public function foo_bar() {
+        $concept_cates = [72, 65, 62, 61, 68, 73, 75, 82, 74,87, 83,80, 63];
+        $structure_cates = [85, 67, 69, 86, 64, 66, 84, 71, 70, 81, 78, 79, 60];
 
-    //     $categories = category::all();
+        $categories = category::all();
 
-    //     foreach($categories as $category) {
-    //         if(in_array($category->id, $concept_cates)) {
-    //             $category->cate_id = 1;
-    //             $category->save();
-    //         } elseif(in_array($category->id, $structure_cates)) {
-    //             $category->cate_id = 2;
-    //             $category->save();
-    //         }
-    //     }
-    // }
+        foreach($categories as $category) {
+            if(in_array($category->id, $concept_cates)) {
+                $category->group_id = 1;
+                $category->save();
+            } elseif(in_array($category->id, $structure_cates)) {
+                $category->group_id = 2;
+                $category->save();
+            }
+        }
+
+        // $categories = category::all();
+        // $biz_scores = biz_score::all();
+        
+        // $biz_viability_list = ['Value proposition','Customer segments', 'Proof of concept','delivery expertise', 'market intelligence','revenue streams','key activities', 'cost structure', 'functional capability', 'key resources', 'financial management'];
+        // $customer_revenue_list = ['customer relationships', 'channels', 'customer segments', 'customers', 'business and customers','marketing and sales', 'revenue streams'];
+        // $market_viability_list = ['Market intelligence', 'delivery expertise', 'business and customers', 'ownership and mindset', 'marketing and sales', 'value proposition', 'key activities', 'customer segments', 'e-commerce'];
+        // $investor_readiness_list = ['value proposition','customer segments', 'proof of concept', 'minimum viable product', 'channels', 'revenue streams', 'cost structure', 'unique selling point', 'employees', 'turnover', 'marketing and sales', 'ownership and mindset','business and customers','growth strategy', 'financial management', 'compliance and certification', 'legal', 'commercial contract agreements'];
+        // $scale_viability_list = ['current alternatives','channels', 'key partners', 'cost structure', 'customer relationships', 'business process management','marketing and sales', 'employee satifaction', 'growth strategy', 'delivery expertise', 'market intelligence', 'financial management'];
+        // $employee_performance_list = ['business process management', 'ownership and mindset','employee satisfaction'];
+        // $financial_list = ['cost structure', 'financial management', 'revenue streams', 'e-commerce'];
+
+        // foreach($categories as $category) {
+        //     foreach($biz_scores as $score) {
+        //         $score->biz_field = $category->biz_field;
+        //         $score->save();
+        //     }
+        // }
+
+        // foreach($categories as $category) {
+        //     foreach($biz_viability_list as $item) {
+        //         if (strtolower($item) == strtolower($category->category_title)) {
+        //             $category->biz_field = 'Biz viability';
+        //             $category->save();
+        //         }
+        //     }
+        // }
+
+        // foreach($categories as $category) {
+        //     foreach($customer_revenue_list as $item) {
+        //         if (strtolower($item) == strtolower($category->category_title)) {
+        //             $category->biz_field = 'Get customers and revenue';
+        //             $category->save();
+        //         }
+        //     }
+        // }
+
+        // foreach($categories as $category) {
+        //     foreach($market_viability_list as $item) {
+        //         if (strtolower($item) == strtolower($category->category_title)) {
+        //             $category->biz_field = 'Market viability';
+        //             $category->save();
+        //         }
+        //     }
+        // }
+
+        // foreach($categories as $category) {
+        //     foreach($investor_readiness_list as $item) {
+        //         if (strtolower($item) == strtolower($category->category_title)) {
+        //             $category->biz_field = 'Investor readiness';
+        //             $category->save();
+        //         }
+        //     }
+        // }
+
+        // foreach($categories as $category) {
+        //     foreach($scale_viability_list as $item) {
+        //         if (strtolower($item) == strtolower($category->category_title)) {
+        //             $category->biz_field = 'Scale viability';
+        //             $category->save();
+        //         }
+        //     }
+        // }
+
+        // foreach($categories as $category) {
+        //     foreach($employee_performance_list as $item) {
+        //         if (strtolower($item) == strtolower($category->category_title)) {
+        //             $category->biz_field = 'Employee performance';
+        //             $category->save();
+        //         }
+        //     }
+        // }
+
+        // foreach($categories as $category) {
+        //     foreach($financial_list as $item) {
+        //         if (strtolower($item) == strtolower($category->category_title)) {
+        //             $category->biz_field = 'Financial';
+        //             $category->save();
+
+        //         }
+        //     }
+        // }
+        
+
+    }
 }

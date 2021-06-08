@@ -17,4 +17,9 @@ class biz_score extends Model
     {
         return $this->belongsTo('App\Models\category', 'category_id');
     }
+
+    public function field()
+    {
+        return $this->belongsTo('App\Models\assess_field', 'field_id');
+    }
 }

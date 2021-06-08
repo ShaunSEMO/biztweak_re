@@ -74,7 +74,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        @foreach ($biz_scores as $score)
+                        @foreach ($field_scores as $score)
                             <div class="col-md-6">
                                 <div id="{{'chart_'.$score->id}}" style="max-width: 900px; max-height: 500px;"></div>
                             </div>

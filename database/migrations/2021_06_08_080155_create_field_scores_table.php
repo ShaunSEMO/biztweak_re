@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAssessFieldsTable extends Migration
+class CreateFieldScoresTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateAssessFieldsTable extends Migration
      */
     public function up()
     {
-        Schema::create('assess_fields', function (Blueprint $table) {
+        Schema::create('field_scores', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id');
             $table->string('field_name');
+            $table->integer('field_score');
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ class CreateAssessFieldsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('assess_fields');
+        Schema::dropIfExists('field_scores');
     }
 }

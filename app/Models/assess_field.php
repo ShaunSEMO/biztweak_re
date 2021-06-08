@@ -13,4 +13,9 @@ class assess_field extends Model
     {
         return $this->hasMany('App\Models\category', 'field_id');
     }
+    public function field()
+    {
+        return $this->hasMany('App\Models\biz_score', 'field_id');
+    }
 }
+
