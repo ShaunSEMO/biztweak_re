@@ -32,7 +32,9 @@
                     <h2>{{ $user->name }}</h2>
                     @if ($user->user_type = 3)
                         <p>Entrepreneur</p>
-                    @endif                                      
+                    @endif  
+                    <br>
+                    <a class="btn btn-primary" href="{{ url('recommendations') }}">Recommendations</a>                                    
                 </div>
             </div>
         </div>
@@ -73,27 +75,174 @@
                 <div class="card-body">
                     <div class="accordion" id="accordionExample">
 
-                        @foreach ($cate_groups as $group)
                             <div class="accordion-item">
-                                <h1 class="accordion-header" id="{{ 'heading'.$group->id}}">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="{{'#collapse'.$group->id}}" aria-expanded="true" aria-controls="collapseOne">
-                                    {{ $group->cate_group_title }}
+                                <h1 class="accordion-header" id="heading1">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
+                                    Business Concept
                                 </button>
                                 </h1>
-                                <div id="{{'collapse'.$group->id}}" class="accordion-collapse collapse show" aria-labelledby="{{ 'heading'.$group->id}}" data-bs-parent="#accordionExample">
+                                <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="heading1" >
                                     <div class="accordion-body">
-                                        <div id="chart_div"></div>
+                                        <div id="concept_chart" style="max-width: 900px; max-height: 500px;"></div>
                                         <hr>
-                                        <h3>Business Diagnosis</h3>
-                                        <ul class="list-group">
-                                            <li class="list-group-item">Channels</li>
-                                            <li class="list-group-item">Value Proposition</li>
-                                            <li class="list-group-item">E-commerce</li>
-                                        </ul>
+                                        <h4>Business Diagnosis</h4>
+                                        <br>
+                                        <br>
+                                        <div class="accordion" id="accordionExample">
+                                            <div class="accordion-item">
+                                              <h2 class="accordion-header" id="headingOne">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                  Priority Elements
+                                                </button>
+                                              </h2>
+                                              <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" >
+                                                <div class="accordion-body">
+                                                    <ul class="list-group">
+                                                        @foreach ($concept_priority_scores as $score)
+                                                          <li class="list-group-item">
+                                                            <h5>{{ $score->category_title }}</h5>
+                                                            <p>{{ $score->score }}</p>
+                                                          </li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                            <div class="accordion-item">
+                                              <h2 class="accordion-header" id="headingTwo">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                  Best Performing Areas
+                                                </button>
+                                              </h2>
+                                              <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" >
+                                                <div class="accordion-body">
+                                                  <ul class="list-group list-group-numbered">
+                                                    @foreach ($concept_best_performing as $performing)
+                                                      <li class="list-group-item d-flex justify-content-between align-items-start list-group-item-success">
+                                                        <div class="ms-2 me-auto">
+                                                          <div class="fw-bold">{{ $performing->category_title }}</div>
+                                                          Cras justo odio
+                                                        </div>
+                                                        <span class="badge bg-primary rounded-pill">{{ $performing->score }}%</span>
+                                                      </li>
+                                                    @endforeach
+                                                  </ul>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            
+                                            <div class="accordion-item">
+                                              <h2 class="accordion-header" id="headingThree">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                  Major Gaps
+                                                </button>
+                                              </h2>
+                                              <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" >
+                                                <div class="accordion-body">
+                                                  <ul class="list-group list-group-numbered">
+                                                    @foreach ($concept_major_gaps as $gap)
+                                                      <li class="list-group-item d-flex justify-content-between align-items-start list-group-item-danger">
+                                                        <div class="ms-2 me-auto">
+                                                          <div class="fw-bold">{{ $gap->category_title }}</div>
+                                                          [options_data]
+                                                        </div>
+                                                        <span class="badge bg-primary rounded-pill">{{ $gap->score }}%</span>
+                                                      </li>
+                                                    @endforeach
+                                                  </ul>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
+
+                            <div class="accordion-item">
+                                <h1 class="accordion-header" id="heading2">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="true" aria-controls="collapseTwo">
+                                    Business Structure
+                                </button>
+                                </h1>
+                                <div id="collapse2" class="accordion-collapse collapse show" aria-labelledby="heading2" >
+                                    <div class="accordion-body">
+                                        <div id="structure_chart" style="max-width: 900px; max-height: 500px;"></div>
+                                        <hr>
+                                        <h4>Business Diagnosis</h4>
+                                        <br>
+                                        <br>
+                                        <div class="accordion" id="accordionExample">
+                                          <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingOne">
+                                              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                Priority Elements
+                                              </button>
+                                            </h2>
+                                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" >
+                                              <div class="accordion-body">
+                                                  <ul class="list-group">
+                                                      @foreach ($structure_priority_scores as $score)
+                                                        <li class="list-group-item">
+                                                          <h5>{{ $score->category_title }}</h5>
+                                                          <p>{{ $score->score }}</p>
+                                                        </li>
+                                                      @endforeach
+                                                  </ul>
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                          <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingTwo">
+                                              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                Best Performing Areas
+                                              </button>
+                                            </h2>
+                                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" >
+                                              <div class="accordion-body">
+                                                <ul class="list-group list-group-numbered">
+                                                  @foreach ($structure_best_performing as $performing)
+                                                    <li class="list-group-item d-flex justify-content-between align-items-start list-group-item-success">
+                                                      <div class="ms-2 me-auto">
+                                                        <div class="fw-bold">{{ $performing->category_title }}</div>
+                                                        Cras justo odio
+                                                      </div>
+                                                      <span class="badge bg-primary rounded-pill">{{ $performing->score }}%</span>
+                                                    </li>
+                                                  @endforeach
+                                                </ul>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          
+                                          <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingThree">
+                                              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                Major Gaps
+                                              </button>
+                                            </h2>
+                                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" >
+                                              <div class="accordion-body">
+                                                <ul class="list-group list-group-numbered">
+                                                  @foreach ($structure_major_gaps as $gap)
+                                                    <li class="list-group-item d-flex justify-content-between align-items-start list-group-item-danger">
+                                                      <div class="ms-2 me-auto">
+                                                        <div class="fw-bold">{{ $gap->category_title }}</div>
+                                                        [options_data]
+                                                      </div>
+                                                      <span class="badge bg-primary rounded-pill">{{ $gap->score }}%</span>
+                                                    </li>
+                                                  @endforeach
+                                                </ul>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                       </div>     
                 </div>
             </div>
@@ -102,50 +251,69 @@
     </div>
 </div>
 
+
 <script>
+    // Business concept report
 
-google.charts.load('current', {packages: ['corechart', 'bar']});
-google.charts.setOnLoadCallback(drawAnnotations);
+    google.charts.load('current', {packages: ['corechart', 'bar']});
+    google.charts.setOnLoadCallback(drawBasic);
 
-function drawAnnotations() {
-      var data = google.visualization.arrayToDataTable([
-        ['Category', 'Advantages', 'Dissadvantages'],
-        ['Channels', 56, 44],
-        ['Functional Capabilities', 87, 13],
-        ['Business and Customers', 23, 73],
-        ['E-commerce', 45, 55],
-      ]);
+function drawBasic() {
 
+      var data = new google.visualization.DataTable();
+      var data_set = {!! json_encode($concept_charts_js) !!};
+
+      data.addColumn('string', 'Category');
+      data.addColumn('number', 'Score');
+
+      data.addRows(data_set);
 
       var options = {
-        title: 'Best Performing Areas',
-        annotations: {
-          alwaysOutside: true,
-          textStyle: {
-            fontSize: 12,
-            auraColor: 'none',
-            color: '#555'
-          },
-          boxStyle: {
-            stroke: '#ccc',
-            strokeWidth: 1,
-            gradient: {
-              color1: '#f3e5f5',
-              color2: '#f3e5f5',
-              x1: '0%', y1: '0%',
-              x2: '100%', y2: '100%'
-            }
-          }
-        },
+        title: 'Business Concept',
         hAxis: {
-          title: 'Total Population',
-          minValue: 0,
+          title: 'Category',
         },
         vAxis: {
-          title: 'City'
+          title: 'Score (scale 0-100)'
         }
       };
-      var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+
+      var chart = new google.visualization.ColumnChart(
+        document.getElementById('concept_chart'));
+
+      chart.draw(data, options);
+    }
+</script>
+
+<script>
+    // Business structure report
+
+    google.charts.load('current', {packages: ['corechart', 'bar']});
+    google.charts.setOnLoadCallback(drawBasic);
+
+function drawBasic() {
+
+      var data = new google.visualization.DataTable();
+      var data_set = {!! json_encode($structure_charts_js) !!};
+
+      data.addColumn('string', 'Category');
+      data.addColumn('number', 'Score');
+
+      data.addRows(data_set);
+
+      var options = {
+        title: 'Business Structure',
+        hAxis: {
+          title: 'Category',
+        },
+        vAxis: {
+          title: 'Score (scale 0-100)'
+        }
+      };
+
+      var chart = new google.visualization.ColumnChart(
+        document.getElementById('structure_chart'));
+
       chart.draw(data, options);
     }
 </script>

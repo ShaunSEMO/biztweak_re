@@ -80,7 +80,16 @@
                             </div>
                         @endforeach
                     </div>
-                    <div id="piechart" style="max-width: 900px; max-height: 500px;"></div>       
+                    {{-- <div id="piechart" style="max-width: 900px; max-height: 500px;"></div>       
+                    <br> --}}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div id="concept_chart" style="max-width: 900px; max-height: 500px;"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="structure_chart" style="max-width: 900px; max-height: 500px;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -91,6 +100,72 @@
 @foreach ($charts_js as $chart)
     {!! $chart !!}
 @endforeach
+
+<script>
+    // Business concept report
+
+    google.charts.load('current', {packages: ['corechart', 'bar']});
+    google.charts.setOnLoadCallback(drawBasic);
+
+function drawBasic() {
+
+      var data = new google.visualization.DataTable();
+      var data_set = {!! json_encode($concept_charts_js) !!};
+
+      data.addColumn('string', 'Category');
+      data.addColumn('number', 'Score');
+
+      data.addRows(data_set);
+
+      var options = {
+        title: 'Business Concept',
+        hAxis: {
+          title: 'Category',
+        },
+        vAxis: {
+          title: 'Score (scale 0-100)'
+        }
+      };
+
+      var chart = new google.visualization.ColumnChart(
+        document.getElementById('concept_chart'));
+
+      chart.draw(data, options);
+    }
+</script>
+
+<script>
+    // Business structure report
+
+    google.charts.load('current', {packages: ['corechart', 'bar']});
+    google.charts.setOnLoadCallback(drawBasic);
+
+function drawBasic() {
+
+      var data = new google.visualization.DataTable();
+      var data_set = {!! json_encode($structure_charts_js) !!};
+
+      data.addColumn('string', 'Category');
+      data.addColumn('number', 'Score');
+
+      data.addRows(data_set);
+
+      var options = {
+        title: 'Business Structure',
+        hAxis: {
+          title: 'Category',
+        },
+        vAxis: {
+          title: 'Score (scale 0-100)'
+        }
+      };
+
+      var chart = new google.visualization.ColumnChart(
+        document.getElementById('structure_chart'));
+
+      chart.draw(data, options);
+    }
+</script>
 
 <script type="text/javascript">
     // ------ Full report ------

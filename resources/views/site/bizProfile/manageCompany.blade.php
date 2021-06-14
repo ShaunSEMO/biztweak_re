@@ -197,7 +197,7 @@
                 <div class="tab-pane fade" id="assessment" role="tabpanel" aria-labelledby="assessment-tab">
                     <h1>Biz Assessment</h1>
                     <div class="accordion" id="accordionExample">
-                        {!! Form::open(['action' => ['App\Http\Controllers\HomeController@saveAssessment', $user->id], 'files' => true, 'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
+                        {!! Form::open(['action' => ['App\Http\Controllers\HomeController@saveAssessment', $user->id, $company->id], 'files' => true, 'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
                         @foreach ($categories as $category)
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="heading{{ $category->id }}">
@@ -217,9 +217,9 @@
                                                     {{ Form::hidden('company_id', $company->id) }}
                                                     {{ Form::hidden('category_id_'.$assessment->id, $assessment->category_id) }}
                                                     {{ Form::label('question'.$assessment->id, 'Yes') }}
-                                                    {{ Form::radio('question'.$assessment->id, 0) }}
-                                                    {{ Form::label('question'.$assessment->id, 'No') }}
                                                     {{ Form::radio('question'.$assessment->id, 1) }}
+                                                    {{ Form::label('question'.$assessment->id, 'No') }}
+                                                    {{ Form::radio('question'.$assessment->id, 0) }}
                                                     <br>
                                                 </div>
                                             @endforeach

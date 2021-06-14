@@ -148,7 +148,7 @@ class HomeController extends Controller
         return redirect('/'.$id.'/manage-company');
     }
 
-    public function saveAssessment($user_id, Request $request) {
+    public function saveAssessment($user_id, $company_id, Request $request) {
         $assessments = assessment::all();
         $asses_id = [];
         $asses_cate_id = [];
@@ -246,9 +246,10 @@ class HomeController extends Controller
                 ])->get())
                 );
 
+
             foreach($answers_per_cate_count as $answer_count) {
                 foreach($yes_answers_per_cate_count as $yes_answer_count) {
-                    $score = $yes_answer_count / $answer_count * 100;
+                    $score = ($yes_answer_count / $answer_count) * 100;
 
                     $biz_score = new biz_score;
                     $biz_score->user_id = $user_id;
@@ -261,7 +262,7 @@ class HomeController extends Controller
                 }
             }
             $biz_score->save();
-        }
+        } 
 
         $biz_scores = biz_score::where('user_id', '=', $user_id)->get();
 
@@ -273,6 +274,7 @@ class HomeController extends Controller
         $employee_performance_list = ['business process management', 'ownership and mindset','employee satisfaction'];
         $financial_list = ['cost structure', 'financial management', 'revenue streams', 'e-commerce'];
         $field_list = ['biz viability', 'Get customers and revenue', 'market viability', 'investor readiness', 'scale viability', 'employee performance', 'financial'];
+
 
         // Save biz viability scores
         $biz_viability_scores = [];
@@ -394,6 +396,126 @@ class HomeController extends Controller
         }
         $financial->save();
 
+        $ideation_priority = [
+            ['value proposition', 3],
+            ['Customer segment', 3],
+            ['Functional Capability', 1],
+            ['Proof of concept', 2],
+            ['Revenue streams', 1],
+            ['Cost structure', 1],
+            ['Compliance', 2],
+        ];
+
+        $startup_priority = [
+            ['Customer relationships', 1],
+            ['Channels', 3],
+            ['E-commerce', 1],
+            ['Functional capabilities', 1],
+            ['Customer segments', 3],
+            ['Business and customers', 1],
+            ['Marketing and sales', 2],
+            ['Revenue streams', 2],
+            ['Ownership and mindset', 2],
+        ];
+
+        $earlystage_priority = [
+            ['Market intelligence', 2],
+            ['Delivery expertise', 1],
+            ['E-commerce', 1],
+            ['Business and customers', 1],
+            ['Ownership and mindset', 1],
+            ['Marketing and sales', 1],
+            ['value proposition', 3],
+            ['Customer segments', 3],
+            ['Current alternatives', 1],
+            ['Key partners', 1],
+            ['Channels', 2],
+        ];
+
+        $accelerate_priority = [
+            ['value proposition', 1],
+            ['Customer segments', 1],
+            ['Functional capabilities', 1],
+            ['Industry specific compliance', 1],
+            ['Best practices', 1],
+            ['Legal: Constitutional Docs. Compliance', 1],
+            ['Legal: Commercial contract agreements', 1],
+            ['Channels', 1],
+            ['Traction', 3],
+            ['Revenue', 2],
+            ['Financial management', 3],
+            ['Cost structure', 1],
+            ['Unique selling point', 2],
+            ['Ownership and mindset', 1],
+            ['Business and customers', 1],
+            ['Growth strategy', 1],
+            ['Current alternatives', 1],
+            ['Key partners', 1],
+            ['Business process management', 1],
+            ['Employee satisfaction', 1],
+        ];
+
+        foreach($biz_scores as $score) {
+            if (User::find($user_id)->biz_profiles->where('id','=',$company_id)->first()->phase_id = 5) {
+                foreach($ideation_priority as $priority) {
+                    if (strtolower($score->category_title) == strtolower($priority[0])) {
+                        $no_within_count = count(answer::where('user_id','=', $user_id)->where('answer', '=', 0)->where('category_id','=',$score->category_id)->get());
+                        $score->priority_score = $no_within_count * $priority[1];
+                        $score->save();
+                    }
+                }
+            }
+        }
+
+        foreach($biz_scores as $score) {
+            if (User::find($user_id)->biz_profiles->where('id','=',$company_id)->first()->phase_id = 2) {
+                foreach($startup_priority as $priority) {
+                    if (strtolower($score->category_title) == strtolower($priority[0])) {
+                        $no_within_count = count(answer::where('user_id','=', $user_id)->where('answer', '=', 0)->where('category_id','=',$score->category_id)->get());
+                        $score->priority_score = $no_within_count * $priority[1];
+                        $score->save();
+                    }
+                }
+            }
+        }
+
+        foreach($biz_scores as $score) {
+            if (User::find($user_id)->biz_profiles->where('id','=',$company_id)->first()->phase_id = 3) {
+                foreach($earlystage_priority as $priority) {
+                    if (strtolower($score->category_title) == strtolower($priority[0])) {
+                        $no_within_count = count(answer::where('user_id','=', $user_id)->where('answer', '=', 0)->where('category_id','=',$score->category_id)->get());
+                        $score->priority_score = $no_within_count * $priority[1];
+                        $score->save();
+                    }
+                }
+            }
+        }
+
+        foreach($biz_scores as $score) {
+            if (User::find($user_id)->biz_profiles->where('id','=',$company_id)->first()->phase_id = 4) {
+                foreach($accelerate_priority as $priority) {
+                    if (strtolower($score->category_title) == strtolower($priority[0])) {
+                        $no_within_count = count(answer::where('user_id','=', $user_id)->where('answer', '=', 0)->where('category_id','=',$score->category_id)->get());
+                        $score->priority_score = $no_within_count * $priority[1];
+                        $score->save();
+                    }
+                }
+            }
+        }
+
+        foreach($biz_scores as $score) {
+            if (User::find($user_id)->biz_profiles->where('id','=',$company_id)->first()->phase_id = 1) {
+                foreach($ideation_priority as $priority) {
+                    if (strtolower($score->category_title) == strtolower($priority[0])) {
+                        $no_within_count = count(answer::where('user_id','=', $user_id)->where('answer', '=', 0)->where('category_id','=',$score->category_id)->get());
+                        $score->priority_score = $no_within_count * $priority[1];
+                        $score->save();
+                    }
+                }
+            }
+        }
+        
+
         // return response($biz_viability_scores);
         return redirect('/'.$request->input('company_id').'/report-summary');
     }
@@ -403,13 +525,26 @@ class HomeController extends Controller
         $user = User::find($company->user_id);
         $biz_scores = biz_score::where('user_id', '=', $user->id)->get();
         $field_scores = field_score::where('user_id', '=', $user->id)->get();
+        $concept_scores = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 1)->get();
+        $structure_scores = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 2)->get();
+
         $scores = [];
         $cate_scores = [];
         $charts_js = [];
+        $concept_charts_js = [];
+        $structure_charts_js = [];
 
-        foreach ($field_scores as $the_score) {
+        foreach ($biz_scores as $the_score) {
             array_push($scores, [$the_score->category_title, $the_score->score]);
             array_push($cate_scores, [$the_score->id, $the_score->category_title, $the_score->score]);
+        }
+
+        foreach($concept_scores as $c_score) {
+            array_push($concept_charts_js, [$c_score->category_title, $c_score->score]);
+        }
+
+        foreach($structure_scores as $c_score) {
+            array_push($structure_charts_js, [$c_score->category_title, $c_score->score]);
         }
 
         foreach($field_scores as $the_score_js) {
@@ -423,8 +558,8 @@ class HomeController extends Controller
         
                     var data = google.visualization.arrayToDataTable([
                     ['Category', 'Score'],
-                    ['Positive',     ".$the_score_js->field_score."],
-                    ['Negative',      ".$score_diff."]
+                    ['Complete',     ".$the_score_js->field_score."],
+                    ['Incomplete',      ".$score_diff."]
                     ]);
         
                     var options = {
@@ -435,6 +570,7 @@ class HomeController extends Controller
                             easing: 'out',
                           },
                         'title': '".$the_score_js->field_name."',
+                        legend: 'none',
 
                     };
         
@@ -447,33 +583,54 @@ class HomeController extends Controller
 
 
         // return response($field_scores);
-        return view('site.report-summary', compact(['user','company', 'scores', 'biz_scores', 'cate_scores', 'charts_js', 'field_scores']));
+        return view('site.report-summary', compact(['user','company', 'scores', 'biz_scores', 'cate_scores', 'charts_js', 'field_scores', 'concept_charts_js','structure_charts_js']));
     }
 
     public function fullReport($company_id) {
         $company = biz_profile::find($company_id);
-        $user = User::find($company->id);   
+        $user = User::find($company->user_id);   
         $cate_groups = cate_groups::all();
+        $concept_scores = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 1)->get();
+        $structure_scores = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 2)->get();
+
+        $concept_priority_scores = biz_score::where('user_id','=', $user->id)->where('group_id', '=', 1)->where('priority_score', '>=', 6)->orderBy('priority_score', 'asc')->get();
+        $concept_best_performing = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 1)->where('score', '>=', 80)->get();
+        $concept_major_gaps = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 1)->where('score', '<=', 40)->get();
+
+        $structure_priority_scores = biz_score::where('user_id','=', $user->id)->where('group_id', '=', 2)->where('priority_score', '>=', 6)->orderBy('priority_score', 'asc')->get();
+        $structure_best_performing = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 2)->where('score', '>=', 80)->get();
+        $structure_major_gaps = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 2)->where('score', '<=', 40)->get();
+
+        $concept_charts_js = [];
+        $structure_charts_js = [];
+
+        foreach($concept_scores as $c_score) {
+            array_push($concept_charts_js, [$c_score->category_title, $c_score->score]);
+        }
+
+        foreach($structure_scores as $c_score) {
+            array_push($structure_charts_js, [$c_score->category_title, $c_score->score]);
+        }
         
 
-        return view('site.full-report', compact(['user', 'company', 'cate_groups']));
+        return view('site.full-report', compact(['user', 'company', 'cate_groups', 'concept_charts_js','structure_charts_js', 'concept_priority_scores', 'concept_best_performing', 'concept_major_gaps', 'structure_priority_scores', 'structure_best_performing', 'structure_major_gaps']));
     }
 
     public function foo_bar() {
-        $concept_cates = [72, 65, 62, 61, 68, 73, 75, 82, 74,87, 83,80, 63];
-        $structure_cates = [85, 67, 69, 86, 64, 66, 84, 71, 70, 81, 78, 79, 60];
+        // $concept_cates = [72, 65, 62, 61, 68, 73, 75, 82, 74,87, 83,80, 63];
+        // $structure_cates = [85, 67, 69, 86, 64, 66, 84, 71, 70, 81, 78, 79, 60];
 
-        $categories = category::all();
+        // $categories = category::all();
 
-        foreach($categories as $category) {
-            if(in_array($category->id, $concept_cates)) {
-                $category->group_id = 1;
-                $category->save();
-            } elseif(in_array($category->id, $structure_cates)) {
-                $category->group_id = 2;
-                $category->save();
-            }
-        }
+        // foreach($categories as $category) {
+        //     if(in_array($category->id, $concept_cates)) {
+        //         $category->group_id = 1;
+        //         $category->save();
+        //     } elseif(in_array($category->id, $structure_cates)) {
+        //         $category->group_id = 2;
+        //         $category->save();
+        //     }
+        // }
 
         // $categories = category::all();
         // $biz_scores = biz_score::all();

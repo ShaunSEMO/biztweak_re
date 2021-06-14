@@ -22,6 +22,7 @@ class CreateBizScoresTable extends Migration
             $table->string('biz_field');
             $table->string('field_id');
             $table->integer('score');
+            $table->integer('priority_score');
             $table->timestamps();
         });
     }
