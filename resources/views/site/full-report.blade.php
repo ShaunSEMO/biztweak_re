@@ -100,8 +100,8 @@
                                                     <ul class="list-group">
                                                         @foreach ($concept_priority_scores as $score)
                                                           <li class="list-group-item">
+                                                            <p>Score: {{ $score->score }}%</p>
                                                             <h5>{{ $score->category_title }}</h5>
-                                                            <p>{{ $score->score }}</p>
                                                           </li>
                                                         @endforeach
                                                     </ul>
