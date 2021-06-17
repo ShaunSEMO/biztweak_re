@@ -19,6 +19,7 @@ class CreateAnswersTable extends Migration
             $table->integer('assessment_id');
             $table->integer('category_id');
             $table->boolean('answer');
+            $table->text('outcome');
             $table->timestamps();
         });
     }

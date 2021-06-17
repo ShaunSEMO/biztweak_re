@@ -216,6 +216,8 @@
                                                     {{ Form::hidden('assessment_id_'.$assessment->id, $assessment->id) }}
                                                     {{ Form::hidden('company_id', $company->id) }}
                                                     {{ Form::hidden('category_id_'.$assessment->id, $assessment->category_id) }}
+                                                    {{ Form::hidden('po_outcome'.$assessment->id, $assessment->po_outcome) }}
+                                                    {{ Form::hidden('ne_outcome'.$assessment->id, $assessment->ne_outcome) }}
                                                     {{ Form::label('question'.$assessment->id, 'Yes') }}
                                                     {{ Form::radio('question'.$assessment->id, 1) }}
                                                     {{ Form::label('question'.$assessment->id, 'No') }}

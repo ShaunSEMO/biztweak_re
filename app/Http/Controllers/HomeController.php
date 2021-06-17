@@ -209,6 +209,8 @@ class HomeController extends Controller
             $id_name = 'assessment_id_'.$asses_id[$i];
             $q_name = 'question'.$asses_id[$i];
             $cate_name = 'category_id_'.$asses_id[$i];
+            $po_outcome_name = 'po_outcome'.$asses_id[$i];
+            $ne_outcome_name = 'ne_outcome'.$asses_id[$i];
 
             if (isset($request->$id_name)) {
                 $answer = new answer;
@@ -216,6 +218,11 @@ class HomeController extends Controller
                 $answer->category_id = $request->$cate_name;
                 $answer->assessment_id = $asses_id[$i];
                 $answer->answer = $request->$q_name;
+                if($request->$q_name == 1) {
+                    $answer->outcome = $request->$po_outcome_name;
+                } else {
+                    $answer->outcome = $request->$ne_outcome_name;
+                }
                 $answer->save();
 
                 if (in_array($answer->category_id, $cate_ids) == false) {
@@ -617,6 +624,8 @@ class HomeController extends Controller
     }
 
     public function foo_bar() {
+        $category = category::find(89);
+        $category->delete();
         // $concept_cates = [72, 65, 62, 61, 68, 73, 75, 82, 74,87, 83,80, 63];
         // $structure_cates = [85, 67, 69, 86, 64, 66, 84, 71, 70, 81, 78, 79, 60];
 
