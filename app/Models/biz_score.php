@@ -22,4 +22,9 @@ class biz_score extends Model
     {
         return $this->belongsTo('App\Models\assess_field', 'field_id');
     }
+
+    public function answers()
+    {
+        return $this->hasMany('App\Models\answer', 'biz_score_id');
+    }
 }

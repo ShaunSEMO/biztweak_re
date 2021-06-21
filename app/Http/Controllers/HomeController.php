@@ -211,6 +211,7 @@ class HomeController extends Controller
             $cate_name = 'category_id_'.$asses_id[$i];
             $po_outcome_name = 'po_outcome'.$asses_id[$i];
             $ne_outcome_name = 'ne_outcome'.$asses_id[$i];
+            $recom_name = 'recom'.$asses_id[$i];
 
             if (isset($request->$id_name)) {
                 $answer = new answer;
@@ -218,6 +219,7 @@ class HomeController extends Controller
                 $answer->category_id = $request->$cate_name;
                 $answer->assessment_id = $asses_id[$i];
                 $answer->answer = $request->$q_name;
+                $answer->recom = $request->$recom_name;
                 if($request->$q_name == 1) {
                     $answer->outcome = $request->$po_outcome_name;
                 } else {
@@ -530,10 +532,20 @@ class HomeController extends Controller
     public function reportSumm($company_id) {
         $company = biz_profile::find($company_id);
         $user = User::find($company->user_id);
+        $answers = answer::where('user_id', '=', $user->id)->get();
         $biz_scores = biz_score::where('user_id', '=', $user->id)->get();
         $field_scores = field_score::where('user_id', '=', $user->id)->get();
         $concept_scores = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 1)->get();
         $structure_scores = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 2)->get();
+
+        foreach ($biz_scores as $score) {
+            foreach($answers as $answer) {
+                if ($answer->category_id == $score->category_id) {
+                    $answer->biz_score_id = $score->id;
+                    $answer->save();
+                }
+            }
+        }
 
         $scores = [];
         $cate_scores = [];
@@ -555,7 +567,7 @@ class HomeController extends Controller
         }
 
         foreach($field_scores as $the_score_js) {
-            $score_diff = 100 - $the_score_js->score;
+            $score_diff = 100 - $the_score_js->field_score;
             array_push($charts_js,
                 "<script>
                 google.charts.load('current', {packages:['corechart', 'bar']});
@@ -565,8 +577,8 @@ class HomeController extends Controller
         
                     var data = google.visualization.arrayToDataTable([
                     ['Category', 'Score'],
-                    ['Complete',     ".$the_score_js->field_score."],
-                    ['Incomplete',      ".$score_diff."]
+                    ['Complete',".$the_score_js->field_score."],
+                    ['Incomplete',".$score_diff."]
                     ]);
         
                     var options = {
@@ -597,6 +609,7 @@ class HomeController extends Controller
         $company = biz_profile::find($company_id);
         $user = User::find($company->user_id);   
         $cate_groups = cate_groups::all();
+        $biz_scores = biz_score::where('user_id', '=', $user->id)->get();
         $concept_scores = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 1)->get();
         $structure_scores = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 2)->get();
 
@@ -607,6 +620,8 @@ class HomeController extends Controller
         $structure_priority_scores = biz_score::where('user_id','=', $user->id)->where('group_id', '=', 2)->where('priority_score', '>=', 6)->orderBy('priority_score', 'asc')->get();
         $structure_best_performing = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 2)->where('score', '>=', 80)->get();
         $structure_major_gaps = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 2)->where('score', '<=', 40)->get();
+
+        $structure_priority_outcomes = [];
 
         $concept_charts_js = [];
         $structure_charts_js = [];
@@ -620,7 +635,7 @@ class HomeController extends Controller
         }
         
 
-        return view('site.full-report', compact(['user', 'company', 'cate_groups', 'concept_charts_js','structure_charts_js', 'concept_priority_scores', 'concept_best_performing', 'concept_major_gaps', 'structure_priority_scores', 'structure_best_performing', 'structure_major_gaps']));
+        return view('site.full-report', compact(['user', 'company', 'cate_groups', 'concept_charts_js','structure_charts_js', 'concept_priority_scores', 'concept_best_performing', 'concept_major_gaps', 'structure_priority_scores', 'structure_best_performing', 'structure_major_gaps', 'biz_scores']));
     }
 
     public function foo_bar() {

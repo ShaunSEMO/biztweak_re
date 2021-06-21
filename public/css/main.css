@@ -2,11 +2,16 @@
     border: 1px solid red;
 } */
 
-#app {
+#image-bg {
     background-image: url('../img/christina-wocintechchat-com-faEfWCdOKIg-unsplash.jpg');
     background-position: center center;
     background-size: cover;
     height: 100vh ;
+}
+
+#app {
+    background: rgb(101,200,208);
+    background: linear-gradient(90deg, rgba(101,200,208,0.5018382352941176) 0%, rgba(0,212,255,0.4962359943977591) 21%, rgba(156,255,255,0.5046393557422969) 100%);
 }
 
 .gb-navbar {
@@ -22,4 +27,17 @@
 
 .login-box {
     border-radius: 25px !important;
+}
+
+.cred-card {
+    border-radius: 25px;
+    padding: 20px;
+
+}
+
+.std-btn {
+    border-radius: 100px;
+    background: rgb(101,200,208);
+    background: linear-gradient(90deg, rgba(101,200,208,1) 0%, rgba(0,212,255,1) 21%);
+    border: none;
 }

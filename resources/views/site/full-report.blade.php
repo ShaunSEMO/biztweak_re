@@ -34,7 +34,44 @@
                         <p>Entrepreneur</p>
                     @endif  
                     <br>
-                    <a class="btn btn-primary" href="{{ url('recommendations') }}">Recommendations</a>                                    
+                    
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary std-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                      Recommendations
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Report Recommendations</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <p>The following are the topics and learning content you need to read and implement in order to improve the processes, systems in your business, as well as business performance</p>
+                            <br>
+                            @foreach ($biz_scores as $biz_score)
+                                <h4>{{ $biz_score->category_title }}</h4>
+                                @php
+                                  $recom_list = [];
+                                  foreach ($biz_score->answers as $answer) {
+                                    if (in_array($answer->recom, $recom_list) == False){
+                                      array_push($recom_list, $answer->recom);
+                                    }
+                                  } 
+                                @endphp
+                                @foreach ($recom_list as $item)
+                                    <p>-{{ $item }}</p>
+                                @endforeach  
+                            @endforeach
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -102,6 +139,10 @@
                                                           <li class="list-group-item">
                                                             <h5>{{ $score->category_title }}</h5>
                                                             <p>Score: {{ $score->score }}%</p>
+                                                            <hr>
+                                                            @foreach ($score->answers as $answer)
+                                                              <p>--{{ $answer->outcome }}</p>
+                                                            @endforeach
                                                           </li>
                                                         @endforeach
                                                     </ul>
@@ -122,7 +163,10 @@
                                                       <li class="list-group-item d-flex justify-content-between align-items-start list-group-item-success">
                                                         <div class="ms-2 me-auto">
                                                           <div class="fw-bold">{{ $performing->category_title }}</div>
-                                                          Cras justo odio
+                                                          <hr>
+                                                          @foreach ($performing->answers as $answer)
+                                                            <p>--{{ $answer->outcome }}</p>
+                                                          @endforeach
                                                         </div>
                                                         <span class="badge bg-primary rounded-pill">{{ $performing->score }}%</span>
                                                       </li>
@@ -145,7 +189,10 @@
                                                       <li class="list-group-item d-flex justify-content-between align-items-start list-group-item-danger">
                                                         <div class="ms-2 me-auto">
                                                           <div class="fw-bold">{{ $gap->category_title }}</div>
-                                                          [options_data]
+                                                          <hr>
+                                                          @foreach ($gap->answers as $answer)
+                                                            <p>--{{ $answer->outcome }}</p>
+                                                          @endforeach
                                                         </div>
                                                         <span class="badge bg-primary rounded-pill">{{ $gap->score }}%</span>
                                                       </li>
@@ -186,6 +233,10 @@
                                                         <li class="list-group-item">
                                                           <h5>{{ $score->category_title }}</h5>
                                                           <p>{{ $score->score }}</p>
+                                                          <hr>
+                                                          @foreach ($score->answers as $answer)
+                                                            <p>--{{ $answer->outcome }}</p>
+                                                        @endforeach
                                                         </li>
                                                       @endforeach
                                                   </ul>
@@ -206,7 +257,10 @@
                                                     <li class="list-group-item d-flex justify-content-between align-items-start list-group-item-success">
                                                       <div class="ms-2 me-auto">
                                                         <div class="fw-bold">{{ $performing->category_title }}</div>
-                                                        Cras justo odio
+                                                        <hr>
+                                                        @foreach ($performing->answers as $answer)
+                                                          <p>--{{ $answer->outcome }}</p>
+                                                        @endforeach
                                                       </div>
                                                       <span class="badge bg-primary rounded-pill">{{ $performing->score }}%</span>
                                                     </li>
@@ -229,7 +283,10 @@
                                                     <li class="list-group-item d-flex justify-content-between align-items-start list-group-item-danger">
                                                       <div class="ms-2 me-auto">
                                                         <div class="fw-bold">{{ $gap->category_title }}</div>
-                                                        [options_data]
+                                                        <hr>
+                                                        @foreach ($gap->answers as $answer)
+                                                            <p>--{{ $answer->outcome }}</p>
+                                                        @endforeach
                                                       </div>
                                                       <span class="badge bg-primary rounded-pill">{{ $gap->score }}%</span>
                                                     </li>
