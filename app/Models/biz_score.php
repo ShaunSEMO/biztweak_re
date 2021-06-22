@@ -27,4 +27,9 @@ class biz_score extends Model
     {
         return $this->hasMany('App\Models\answer', 'biz_score_id');
     }
+
+    public function biz_profile()
+    {
+        return $this->belongsTo('App\Models\biz_profile', 'biz_id');
+    }
 }

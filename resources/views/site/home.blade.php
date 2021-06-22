@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container" >
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <div class="card">
+            <div class="card user-container">
                 <div class="card-body" style="text-align:center;">
                     @if (isset($user->profile_picture))
                         <div class="container" style="height: 150px; width: 150px; border-radius: 100px; background-image: url({{ asset($user->profile_picture) }}); background-position: center center; background-size: cover;">
@@ -38,22 +38,24 @@
         </div>
 
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Your Companies</div>
-
+            <div class="card" style="background-color: #5BD4D9; border: none;">
+                <div class="card-header" style="border-radius: 25px; background-color: #2a8f92; color: white;">Your Companies</div>
+                <br>
                 <div class="card-body">
-                    <a class='btn btn-primary' href="{{ url($user->id.'/add-company') }}"><i class="fas fa-plus-circle"></i></a>
+                    <a class='btn btn-primary std-btn' href="{{ url($user->id.'/add-company') }}"><i class="fas fa-plus-circle"></i>Add Company</a>
                     <br>
                     <br>
                     @if (count($user->biz_profiles)>0)
                         <div class="row">
                             @foreach ($user->biz_profiles as $biz)
-                                <div class="col-md-4">
+                                <div class="col-md-4" style="text-align: center">
                                     <a href="{{ url($biz->id.'/manage-company') }}" style="text-decoration: none;">
-                                        <div class="card text-dark bg-info mb-3" style="max-width: 18rem;">
-                                            <div class="card-header">{{ $biz->name }}</div>
+                                        <div class="card text-dark mb-3" style="max-width: 18rem; padding: 5px; border-radius: 25px;">
+                                            <div class="card-header" style="border-radius: 25px; background-color: #2a8f92; color: white;">{{ $biz->name }}</div>
                                             <div class="card-body">
                                                 <img class="img-fluid thumbnail" src="{{ asset($biz->logo) }}" alt="Business logo">
+                                                <br>
+                                                <br>
                                                 @if (isset($biz->reg_number))
                                                     <p>{{ $biz->reg_number }}</p>
                                                 @endif

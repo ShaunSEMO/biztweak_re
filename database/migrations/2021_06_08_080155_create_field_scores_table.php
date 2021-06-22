@@ -16,6 +16,7 @@ class CreateFieldScoresTable extends Migration
         Schema::create('field_scores', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
+            $table->integer('biz_id');
             $table->string('field_name');
             $table->integer('field_score');
             $table->timestamps();

@@ -88,8 +88,7 @@
                             <div class="card-body container login-box">
                                 <p class="login-header">Login</p>
                                 <br>
-                                <br>
-                                <br>
+                        
                                 <form method="POST" action="{{ route('login') }}">
                                     @csrf
 

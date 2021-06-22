@@ -28,4 +28,9 @@ class answer extends Model
     {
         return $this->belongsTo('App\Models\biz_score', 'biz_score_id');
     }
+
+    public function biz_profile()
+    {
+        return $this->belongsTo('App\Models\biz_profile', 'biz_id');
+    }
 }

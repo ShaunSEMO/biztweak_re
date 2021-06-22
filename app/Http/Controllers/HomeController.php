@@ -105,12 +105,14 @@ class HomeController extends Controller
         $company = biz_profile::find($id);
         $phase = $company->phase->phase;
         $user = User::find($company->user_id);
+        $assessment_complete = 0 == count(answer::where('biz_id', '=', $company->id)->get());
         
         $assessments = assessment::where('phase', '=', $company->biz_phase)->get();
         // $curr_category = assessment::where('phase', '=', $company->biz_phase)->first()->category;
         $categories = category::where($phase, '=', 1)->get();
 
-        return view('site.bizProfile.manageCompany', compact(['company', 'user', 'phase', 'assessments', 'categories']));
+        // return response($assessment_complete);
+        return view('site.bizProfile.manageCompany', compact(['company', 'user', 'phase', 'assessments', 'categories', 'assessment_complete']));
     }
 
     public function editCompany($id, Request $request) {
@@ -160,42 +162,49 @@ class HomeController extends Controller
 
         $biz_viability = new field_score;
         $biz_viability->user_id = $user_id;
+        $biz_viability->biz_id = $company_id;
         $biz_viability->field_name = "Biz viability";
         $biz_viability->field_score = 0;
         $biz_viability->save();
 
         $customer_revenue = new field_score;
         $customer_revenue->user_id = $user_id;
+        $customer_revenue->biz_id = $company_id;
         $customer_revenue->field_name = "Get customers and revenue";
         $customer_revenue->field_score = 0;
         $customer_revenue->save();
 
         $market_viability = new field_score;
         $market_viability->user_id = $user_id;
+        $market_viability->biz_id = $company_id;
         $market_viability->field_name = "Market viability";
         $market_viability->field_score = 0;
         $market_viability->save();
         
         $investor_readiness = new field_score;
         $investor_readiness->user_id = $user_id;
+        $investor_readiness->biz_id = $company_id;
         $investor_readiness->field_name = "Investor readiness";
         $investor_readiness->field_score = 0;
         $investor_readiness->save();
 
         $scale_viability = new field_score;
         $scale_viability->user_id = $user_id;
+        $scale_viability->biz_id = $company_id;
         $scale_viability->field_name = "Scale viability";
         $scale_viability->field_score = 0;
         $scale_viability->save();
 
         $employee_performance = new field_score;
         $employee_performance->user_id = $user_id;
+        $employee_performance->biz_id = $company_id;
         $employee_performance->field_name = "Employee performance";
         $employee_performance->field_score = 0;
         $employee_performance->save();
 
         $financial = new field_score;
         $financial->user_id = $user_id;
+        $financial->biz_id = $company_id;
         $financial->field_name = "Financial";
         $financial->field_score = 0;
         $financial->save();
@@ -218,6 +227,7 @@ class HomeController extends Controller
                 $answer->user_id = $user_id;
                 $answer->category_id = $request->$cate_name;
                 $answer->assessment_id = $asses_id[$i];
+                $answer->biz_id = $company_id;
                 $answer->answer = $request->$q_name;
                 $answer->recom = $request->$recom_name;
                 if($request->$q_name == 1) {
@@ -264,6 +274,7 @@ class HomeController extends Controller
                     $biz_score->user_id = $user_id;
                     $biz_score->category_id = $int;
                     $biz_score->group_id = category::where('id', '=', $int)->first()->group_id;
+                    $biz_score->biz_id = $company_id;
                     $biz_score->category_title = category::where('id', '=', $int)->first()->category_title;
                     $biz_score->field_id = category::where('id', '=', $int)->first()->field_id;
                     $biz_score->score = $score;
@@ -273,7 +284,7 @@ class HomeController extends Controller
             $biz_score->save();
         } 
 
-        $biz_scores = biz_score::where('user_id', '=', $user_id)->get();
+        $biz_scores = biz_score::where('user_id', '=', $user_id)->where('biz_id', '=', $company_id)->get();
 
         $biz_viability_list = ['Value proposition','Customer segments', 'Proof of concept','delivery expertise', 'market intelligence','revenue streams','key activities', 'cost structure', 'functional capability', 'key resources', 'financial management'];
         $customer_revenue_list = ['customer relationships', 'channels', 'customer segments', 'customers', 'business and customers','marketing and sales', 'revenue streams'];
@@ -294,7 +305,7 @@ class HomeController extends Controller
                     }
                 }
         }
-        $biz_viability = field_score::where('user_id', '=', $user_id)->where('field_name', '=', 'Biz viability')->first();
+        $biz_viability = field_score::where('user_id', '=', $user_id)->where('biz_id', '=', $company_id)->where('field_name', '=', 'Biz viability')->first();
         if (count($biz_viability_scores)!= 0) {
             $biz_viability->field_score = (array_sum($biz_viability_scores) / (count($biz_viability_scores) * 100)) * 100;
         } else {
@@ -311,7 +322,7 @@ class HomeController extends Controller
                     }
                 }
         }
-        $customer_revenue = field_score::where('user_id', '=', $user_id)->where('field_name', '=', 'Get customers and revenue')->first();
+        $customer_revenue = field_score::where('user_id', '=', $user_id)->where('biz_id', '=', $company_id)->where('field_name', '=', 'Get customers and revenue')->first();
         if (count($customer_revenue_scores)!= 0) {
             $customer_revenue->field_score = (array_sum($customer_revenue_scores) / (count($customer_revenue_scores) * 100)) * 100;
         } else {
@@ -328,7 +339,7 @@ class HomeController extends Controller
                     }
                 }
         }
-        $market_viability = field_score::where('user_id', '=', $user_id)->where('field_name', '=', 'Market viability')->first();
+        $market_viability = field_score::where('user_id', '=', $user_id)->where('biz_id', '=', $company_id)->where('field_name', '=', 'Market viability')->first();
     
         if (count($market_viability_scores)!= 0) {
             $market_viability->field_score = (array_sum($market_viability_scores) / (count($market_viability_scores) * 100)) * 100;
@@ -346,7 +357,7 @@ class HomeController extends Controller
                     }
                 }
         }
-        $investor_readiness = field_score::where('user_id', '=', $user_id)->where('field_name', '=', 'Investor readiness')->first();
+        $investor_readiness = field_score::where('user_id', '=', $user_id)->where('biz_id', '=', $company_id)->where('field_name', '=', 'Investor readiness')->first();
         if (count($investor_readiness_scores)!= 0) {
             $investor_readiness->field_score = (array_sum($investor_readiness_scores) / (count($investor_readiness_scores) * 100)) * 100;
         } else {
@@ -363,7 +374,7 @@ class HomeController extends Controller
                     }
                 }
         }
-        $scale_viability = field_score::where('user_id', '=', $user_id)->where('field_name', '=', 'Scale viability')->first();
+        $scale_viability = field_score::where('user_id', '=', $user_id)->where('biz_id', '=', $company_id)->where('field_name', '=', 'Scale viability')->first();
         if (count($scale_viability_scores)!= 0) {
             $scale_viability->field_score = (array_sum($scale_viability_scores) / (count($scale_viability_scores) * 100)) * 100;
         } else {
@@ -380,7 +391,7 @@ class HomeController extends Controller
                     }
                 }
         }
-        $employee_performance = field_score::where('user_id', '=', $user_id)->where('field_name', '=', 'Employee performance')->first();
+        $employee_performance = field_score::where('user_id', '=', $user_id)->where('biz_id', '=', $company_id)->where('field_name', '=', 'Employee performance')->first();
         if (count($employee_performance_scores)!= 0) {
             $employee_performance->field_score = (array_sum($employee_performance_scores) / (count($employee_performance_scores) * 100)) * 100;
         } else {
@@ -397,7 +408,7 @@ class HomeController extends Controller
                     }
                 }
         }
-        $financial = field_score::where('user_id', '=', $user_id)->where('field_name', '=', 'Financial')->first();
+        $financial = field_score::where('user_id', '=', $user_id)->where('biz_id', '=', $company_id)->where('field_name', '=', 'Financial')->first();
         if (count($financial_scores)!= 0) {
             $financial->field_score = (array_sum($financial_scores) / (count($financial_scores) * 100)) * 100;
         } else {
@@ -532,11 +543,11 @@ class HomeController extends Controller
     public function reportSumm($company_id) {
         $company = biz_profile::find($company_id);
         $user = User::find($company->user_id);
-        $answers = answer::where('user_id', '=', $user->id)->get();
-        $biz_scores = biz_score::where('user_id', '=', $user->id)->get();
-        $field_scores = field_score::where('user_id', '=', $user->id)->get();
-        $concept_scores = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 1)->get();
-        $structure_scores = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 2)->get();
+        $answers = answer::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->get();
+        $biz_scores = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->get();
+        $field_scores = field_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->get();
+        $concept_scores = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 1)->get();
+        $structure_scores = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->get();
 
         foreach ($biz_scores as $score) {
             foreach($answers as $answer) {
@@ -578,18 +589,22 @@ class HomeController extends Controller
                     var data = google.visualization.arrayToDataTable([
                     ['Category', 'Score'],
                     ['Complete',".$the_score_js->field_score."],
-                    ['Incomplete',".$score_diff."]
+                    ['',".$score_diff."]
                     ]);
         
                     var options = {
-                        pieHole: 0.3,
+                        pieHole: 0.45,
                         animation:{
                             'startup': true,
                             duration: 1000,
-                            easing: 'out',
+                            easing: 'out'
                           },
                         'title': '".$the_score_js->field_name."',
                         legend: 'none',
+                        slices: {
+                            0: { color: '#5BD4D9' },
+                            1: { color: 'transparent' }
+                        }
 
                     };
         
@@ -609,22 +624,23 @@ class HomeController extends Controller
         $company = biz_profile::find($company_id);
         $user = User::find($company->user_id);   
         $cate_groups = cate_groups::all();
-        $biz_scores = biz_score::where('user_id', '=', $user->id)->get();
-        $concept_scores = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 1)->get();
-        $structure_scores = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 2)->get();
+        $biz_scores = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->get();
+        $concept_scores = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 1)->get();
+        $structure_scores = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->get();
 
-        $concept_priority_scores = biz_score::where('user_id','=', $user->id)->where('group_id', '=', 1)->where('priority_score', '>=', 6)->orderBy('priority_score', 'asc')->get();
-        $concept_best_performing = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 1)->where('score', '>=', 80)->get();
-        $concept_major_gaps = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 1)->where('score', '<=', 40)->get();
+        $concept_priority_scores = biz_score::where('user_id','=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 1)->where('priority_score', '>=', 6)->orderBy('priority_score', 'asc')->get();
+        $concept_best_performing = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 1)->where('score', '>=', 80)->get();
+        $concept_major_gaps = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 1)->where('score', '<=', 40)->get();
 
-        $structure_priority_scores = biz_score::where('user_id','=', $user->id)->where('group_id', '=', 2)->where('priority_score', '>=', 6)->orderBy('priority_score', 'asc')->get();
-        $structure_best_performing = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 2)->where('score', '>=', 80)->get();
-        $structure_major_gaps = biz_score::where('user_id', '=', $user->id)->where('group_id', '=', 2)->where('score', '<=', 40)->get();
+        $structure_priority_scores = biz_score::where('user_id','=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->where('priority_score', '>=', 6)->orderBy('priority_score', 'asc')->get();
+        $structure_best_performing = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->where('score', '>=', 80)->get();
+        $structure_major_gaps = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->where('score', '<=', 40)->get();
 
         $structure_priority_outcomes = [];
 
         $concept_charts_js = [];
         $structure_charts_js = [];
+
 
         foreach($concept_scores as $c_score) {
             array_push($concept_charts_js, [$c_score->category_title, $c_score->score]);
@@ -634,7 +650,6 @@ class HomeController extends Controller
             array_push($structure_charts_js, [$c_score->category_title, $c_score->score]);
         }
         
-
         return view('site.full-report', compact(['user', 'company', 'cate_groups', 'concept_charts_js','structure_charts_js', 'concept_priority_scores', 'concept_best_performing', 'concept_major_gaps', 'structure_priority_scores', 'structure_best_performing', 'structure_major_gaps', 'biz_scores']));
     }
 
