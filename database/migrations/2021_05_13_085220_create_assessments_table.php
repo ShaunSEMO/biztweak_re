@@ -20,6 +20,9 @@ class CreateAssessmentsTable extends Migration
             $table->string('question_text');
             $table->char('category', 100);
             $table->char('phase', 50);
+            $table->text('po_outcome');
+            $table->text('ne_outcome');
+            $table->text('recom');
             $table->timestamps();
         });
     }

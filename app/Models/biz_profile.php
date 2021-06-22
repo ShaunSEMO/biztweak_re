@@ -18,4 +18,19 @@ class biz_profile extends Model
     {
         return $this->belongsTo('App\Models\phase', 'phase_id');
     }
+
+    public function field_scores()
+    {
+        return $this->hasMany('App\Models\field_score', 'biz_id');
+    }
+
+    public function answers()
+    {
+        return $this->hasMany('App\Models\answer', 'biz_id');
+    }
+
+    public function biz_scores()
+    {
+        return $this->hasMany('App\Models\biz_score', 'biz_id');
+    }
 }

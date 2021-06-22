@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container" style="color: white">
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <div class="card">
+            <div class="card user-container">
                 <div class="card-body" style="text-align:center;">
                     @if (isset($user->profile_picture))
                         <div class="container" style="height: 150px; width: 150px; border-radius: 100px; background-image: url({{ asset($user->profile_picture) }}); background-position: center center; background-size: cover;">
@@ -39,31 +39,35 @@
 
         <div class="col-md-8">
             {{-- Current company details --}}
-            <div class="container row">
-                <div class="col-md-4">
-                    <img class="img-fluid" src="{{ asset($company->logo) }}" alt="Company Logo">
-                </div>
-                <div class="col-md-8">
-                    <h3>{{ $company->name }}</h3>
-                    <br>
-                    @if ($company->registered == 1)
-                        <p>Registration #: {{ $company->reg_number }}</p>
-                    @endif
-                    <p>Location: {{ $company->location }}</p>
-                    <p>Industry: {{ $company->industry }}</p>
-                    @if ($company->biz_phase = 'phase_i')
-                        <p>Business phase: I have an idea but don’t know what to do next</p>
-                    @elseif ($company->biz_phase = 'phase_ii')
-                        <p>I have a business but am not making money</p>
-                    @elseif ($company->biz_phase = 'phase_iii')
-                        <p>I have products/services but I have poor sales</p>
-                    @elseif ($company->biz_phase = 'phase_iv')
-                        <p>We are generating revenue, we would like to grow through investment</p>   
-                    @elseif ($company->biz_phase = 'phase_v')
-                        <p>I would like to be an entrepreneur but don’t know where to start</p>  
-                    @endif
-                </div>
+            <div class="container"> 
+                <div class="user-container row">
+                    <div class="col-md-4">
+                        <img class="img-fluid" src="{{ asset($company->logo) }}" alt="Company Logo">
+                    </div>
+                    <div class="col-md-8">
+                        <h3>{{ $company->name }}</h3>
+                        <br>
+                        @if ($company->registered == 1)
+                            <p>Registration #: {{ $company->reg_number }}</p>
+                        @endif
+                        <p>Location: {{ $company->location }}</p>
+                        <p>Industry: {{ $company->industry }}</p>
+                        @if ($company->biz_phase = 'phase_i')
+                            <p>Business phase: I have an idea but don’t know what to do next</p>
+                        @elseif ($company->biz_phase = 'phase_ii')
+                            <p>I have a business but am not making money</p>
+                        @elseif ($company->biz_phase = 'phase_iii')
+                            <p>I have products/services but I have poor sales</p>
+                        @elseif ($company->biz_phase = 'phase_iv')
+                            <p>We are generating revenue, we would like to grow through investment</p>   
+                        @elseif ($company->biz_phase = 'phase_v')
+                            <p>I would like to be an entrepreneur but don’t know where to start</p>  
+                        @endif
+                    </div>
+                </div> 
             </div>
+
+            <br><br>
 
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
@@ -77,8 +81,8 @@
                 <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                     <br>
                     <br>
-                    <div class="card">
-                        <div class="card-header">You can edit your company profile below</div>
+                    <div class="card user-container">
+                        <div class="card-header" style="border-radius: 25px; background-color: #2a8f92; color: white;">You can edit your company profile below</div>
                         <div class="card-body container">
                             {!! Form::open(['action' => ['App\Http\Controllers\HomeController@editCompany', $company->id], 'files' => true, 'method' => 'put', 'enctype' => 'multipart/form-data']) !!}
                                 <p>Company Name</p>
@@ -87,9 +91,9 @@
                                 <p>Is your company registered?</p>
                                 @if ($company->registered == 0)
                                     {{ Form::label('registered', 'Yes') }}
-                                    {{ Form::radio('registered', 1) }}
+                                    {{ Form::radio('registered', 1, '',['class'=>'radio']) }}
                                     {{ Form::label('registered', 'No') }}
-                                    {{ Form::radio('registered', 0, true) }}
+                                    {{ Form::radio('registered', 0, true, ['class'=>'radio']) }}
                                 @elseif($company->registered == 1) 
                                     {{ Form::label('registered', 'Yes') }}
                                     {{ Form::radio('registered', 1, true) }}
@@ -97,12 +101,14 @@
                                     {{ Form::radio('registered', 0) }}
                                 @endif
                                 <hr>
-                                <p>Registration Number</p>
-                                {{ Form::text('reg_number', $company->reg_number, ['class'=>'form-control', 'id'=>'reg_number', 'placeholder'=>'Registration number...']) }}
-                                <hr>
-                                <p>Registration Date</p>
-                                {{ Form::text('reg_date', $company->reg_date, ['class'=>'form-control', 'id'=>'reg_date', 'placeholder'=>'Registration date...']) }}
-                                <hr>
+                                <div id='reg_bin'>
+                                    <p>Registration Number</p>
+                                    {{ Form::text('reg_number', $company->reg_number, ['class'=>'form-control', 'id'=>'reg_number', 'placeholder'=>'Registration number...']) }}
+                                    <hr>
+                                    <p>Registration Date</p>
+                                    {{ Form::date('reg_date', $company->reg_date, ['class'=>'form-control', 'id'=>'reg_date', 'placeholder'=>'Registration date...']) }}
+                                    <hr>
+                                </div>
                                 <p>Company Location</p>
                                 {{ Form::text('location', $company->location, ['class'=>'form-control', 'placeholder'=>'Company physical address...']) }}
                                 <hr>
@@ -195,46 +201,91 @@
 
                 </div>
                 <div class="tab-pane fade" id="assessment" role="tabpanel" aria-labelledby="assessment-tab">
-                    <h1>Biz Assessment</h1>
-                    <div class="accordion" id="accordionExample">
-                        {!! Form::open(['action' => ['App\Http\Controllers\HomeController@saveAssessment', $user->id], 'files' => true, 'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
-                        @foreach ($categories as $category)
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="heading{{ $category->id }}">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $category->id }}" aria-expanded="true" aria-controls="collapse{{ $category->id }}">
-                                        {{ $category->category_title }}
-                                    </button>
-                                </h2>
-                                <div id="collapse{{ $category->id }}" class="accordion-collapse collapse show" aria-labelledby="heading{{ $category->id }}" data-bs-parent="#accordionExample">
-                                    <div class="accordion-body row">
-                                            @foreach ($category->assessments as $assessment)
-                                                <div class="col-md-8">
-                                                    <p>{{ $assessment->question_text }}</p>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <br>
-                                                    {{ Form::hidden('assessment_id_'.$assessment->id, $assessment->id) }}
-                                                    {{ Form::hidden('company_id', $company->id) }}
-                                                    {{ Form::hidden('category_id_'.$assessment->id, $assessment->category_id) }}
-                                                    {{ Form::label('question'.$assessment->id, 'Yes') }}
-                                                    {{ Form::radio('question'.$assessment->id, 0) }}
-                                                    {{ Form::label('question'.$assessment->id, 'No') }}
-                                                    {{ Form::radio('question'.$assessment->id, 1) }}
-                                                    <br>
-                                                </div>
-                                            @endforeach
+                    <br>
+                    <br>
+                    @if ($assessment_complete != null)
+                    <h3>Biz Assessment</h3>
+                    <br>
+                        <div class="accordion" id="accordionExample">
+                            {!! Form::open(['action' => ['App\Http\Controllers\HomeController@saveAssessment', $user->id, $company->id], 'files' => true, 'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
+                                @foreach ($categories as $category)
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading{{ $category->id }}">
+                                            <button style="color: white; background-color: #2a8f92;" class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $category->id }}" aria-expanded="true" aria-controls="collapse{{ $category->id }}">
+                                                {{ $category->category_title }}
+                                            </button>
+                                        </h2>
+                                        
+                                        <div style="margin-top: 10px;" id="collapse{{ $category->id }}" class="accordion-collapse collapse show container" aria-labelledby="heading{{ $category->id }}" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body row" style="background-color: white; color: black; border-radius: 25px; padding: 10px;">
+                                                    @foreach ($category->assessments as $assessment)
+                                                        <div class="col-md-8">
+                                                            <p>{{ $assessment->question_text }}</p>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <br>
+                                                            {{ Form::hidden('assessment_id_'.$assessment->id, $assessment->id) }}
+                                                            {{ Form::hidden('company_id', $company->id) }}
+                                                            {{ Form::hidden('category_id_'.$assessment->id, $assessment->category_id) }}
+                                                            {{ Form::hidden('po_outcome'.$assessment->id, $assessment->po_outcome) }}
+                                                            {{ Form::hidden('ne_outcome'.$assessment->id, $assessment->ne_outcome) }}
+                                                            {{ Form::hidden('recom'.$assessment->id, $assessment->recom) }}
+                                                            {{ Form::label('question'.$assessment->id, 'Yes') }}
+                                                            {{ Form::radio('question'.$assessment->id, 1) }}
+                                                            {{ Form::label('question'.$assessment->id, 'No') }}
+                                                            {{ Form::radio('question'.$assessment->id, 0) }}
+                                                            <br>
+                                                        </div>
+                                                    @endforeach
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        @endforeach
-                        {{ Form::submit('Save', ['class' => 'btn btn-primary std-btn']) }}
-                        {!! Form::close() !!}
-                        <a href="{{ url($company->id.'/report-summary') }}" class="btn btn-primary"><i class="fas fa-chart-pie">Report Summary</i></a>
+                                    <br><br>
+                                @endforeach
+                            {{ Form::submit('Save', ['class' => 'btn btn-primary std-btn']) }}
+                            {!! Form::close() !!}
+                        <br>
                       </div>
+                    @else
+                        <h3>Assessment Complete</h3>
+                        <hr style="max-width: 100px;">
+                        <p>Please view the report summary for assessment results</p>
+                    @endif
+                    <a href="{{ url($company->id.'/report-summary') }}" class="btn btn-primary std-btn"><i class="fas fa-chart-pie"></i>Report Summary</a>
                 </div>
             </div>
 
         </div>
     </div>
 </div>
+
+<script>
+    // var radio = document.getElementById('reg_yes');
+    // var radio_no = document.getElementById('reg_no');
+    // var reg_bin = document.getElementById('reg_bin');
+
+    // if (radio.checked) {
+    //     reg_bin.style.display = 'block'
+    // };
+
+    // if (radio_no.checked) {
+    //     reg_bin.style.display = 'none'
+    // };
+
+    jQuery(document).ready(function(){
+
+        $('.radio').on('change', function() {
+        // this, in the anonymous function, refers to the changed-<input>:
+        // select the element(s) you want to show/hide:
+        $('#reg_bin')
+            // pass a Boolean to the method, if the numeric-value of the changed-<input>
+            // is exactly equal to 2 and that <input> is checked, the .business-fields
+            // will be shown:
+            .toggle(+this.value === 1 && this.checked);
+        // trigger the change event, to show/hide the .business-fields element(s) on
+        // page-load:
+        }).change();
+
+    });
+</script>
 @endsection

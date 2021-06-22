@@ -21,6 +21,11 @@ class category extends Model
 
     public function cate_group()
     {
-        return $this->belongsTo('App\Models\cate_groups');
+        return $this->belongsTo('App\Models\cate_groups', 'group_id');
+    }
+
+    public function field()
+    {
+        return $this->belongsTo('App\Models\cate_groups', 'group_id');
     }
 }

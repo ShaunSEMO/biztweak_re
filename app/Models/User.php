@@ -59,5 +59,10 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\biz_score', 'user_id');
     }
+
+    public function field_scores()
+    {
+        return $this->hasMany('App\Models\field_score', 'user_id');
+    }
     
 }

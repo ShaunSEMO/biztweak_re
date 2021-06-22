@@ -18,7 +18,11 @@ class CreateAnswersTable extends Migration
             $table->integer('user_id');
             $table->integer('assessment_id');
             $table->integer('category_id');
+            $table->integer('biz_score_id');
+            $table->integer('biz_id');
             $table->boolean('answer');
+            $table->text('recom');
+            $table->text('outcome');
             $table->timestamps();
         });
     }

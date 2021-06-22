@@ -1,0 +1,91 @@
+/* * {
+    border: 1px solid red;
+} */
+
+#image-bg {
+    background-image: url('../img/christina-wocintechchat-com-faEfWCdOKIg-unsplash.jpg');
+    background-position: center center;
+    background-size: cover;
+    height: 100vh ;
+}
+
+#app {
+    background: #5BD4D9;
+}
+
+.gb-navbar {
+    margin-top: 20px;
+    height: 60px;
+    border-radius: 25px;
+}
+
+.login-header {
+    font-size: 50px;
+    font-weight: lighter;
+}
+
+.login-box {
+    border-radius: 25px !important;
+}
+
+.cred-card {
+    border-radius: 25px;
+    padding: 20px;
+
+}
+
+.std-btn {
+    border-radius: 100px;
+    background: #2a8f92;
+    border: none;
+}
+
+.rounded-charts svg {
+    border-radius: 25px;
+}
+
+.rounded-charts {
+    padding: 20px;
+}
+
+.user-container {
+    border-radius: 25px !important;
+    padding: 20px;
+    color: black;
+    background-color: white !important;
+}
+
+.cust-accordion button {
+    color: #5BD4D9 !important; 
+    background-color: white !important;
+}
+
+.accordion-item button {
+    border-radius: 25px !important;
+}
+
+.accordion-item {
+    background-color: #5BD4D9; 
+    border: none;
+}
+
+.nav-link.active {
+    color: white !important;
+    background-color: #2a8f92 !important;
+    border-radius: 100px !important;
+    border: none;
+}
+
+.nav-link {
+    display: block;
+    padding: .5rem 1rem;
+    border-radius: 100px !important;
+    color: #000;
+    background-color: white !important;
+    text-decoration: none;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
+}
+
+.nav-tabs {
+    border:none;
+}
