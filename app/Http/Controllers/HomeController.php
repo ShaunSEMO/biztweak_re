@@ -97,7 +97,7 @@ class HomeController extends Controller
         $company->eft_to_perc  = $request->input('eft_to_perc');
         $company->save();
 
-        return redirect('/');
+        return redirect('/'.$company->id.'/manage-company2');
 
     }
 
@@ -113,6 +113,20 @@ class HomeController extends Controller
 
         // return response($assessment_complete);
         return view('site.bizProfile.manageCompany', compact(['company', 'user', 'phase', 'assessments', 'categories', 'assessment_complete']));
+    }
+
+    public function manageCompany2($id) {
+        $company = biz_profile::find($id);
+        $phase = $company->phase->phase;
+        $user = User::find($company->user_id);
+        $assessment_complete = 0 == count(answer::where('biz_id', '=', $company->id)->get());
+        
+        $assessments = assessment::where('phase', '=', $company->biz_phase)->get();
+        // $curr_category = assessment::where('phase', '=', $company->biz_phase)->first()->category;
+        $categories = category::where($phase, '=', 1)->get();
+
+        // return response($assessment_complete);
+        return view('site.bizProfile.manageCompany2', compact(['company', 'user', 'phase', 'assessments', 'categories', 'assessment_complete']));
     }
 
     public function editCompany($id, Request $request) {
@@ -629,12 +643,15 @@ class HomeController extends Controller
         $structure_scores = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->get();
 
         $concept_priority_scores = biz_score::where('user_id','=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 1)->where('priority_score', '>=', 6)->orderBy('priority_score', 'asc')->get();
-        $concept_best_performing = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 1)->where('score', '>=', 80)->get();
-        $concept_major_gaps = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 1)->where('score', '<=', 40)->get();
+        $concept_best_performing = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 1)->orderBy('score', 'desc')->take(3)->get();
+        $concept_major_gaps = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 1)->orderBy('score', 'asc')->take(3)->get();
+        $concept_other_assessment = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 1)->where('score', '<', $concept_major_gaps[count($concept_major_gaps)-1]->score)->where('score', '>', $concept_best_performing[count($concept_best_performing)-1]->score)->get();
 
         $structure_priority_scores = biz_score::where('user_id','=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->where('priority_score', '>=', 6)->orderBy('priority_score', 'asc')->get();
-        $structure_best_performing = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->where('score', '>=', 80)->get();
-        $structure_major_gaps = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->where('score', '<=', 40)->get();
+        $structure_best_performing = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->orderBy('score', 'desc')->take(3)->get();
+        $structure_major_gaps = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->orderBy('score', 'asc')->take(3)->get();
+        $structure_other_assessment = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->where('score', '<', $structure_major_gaps[count($structure_major_gaps)-1]->score)->where('score', '>', $structure_best_performing[count($structure_best_performing)-1]->score)->get();
+
 
         $structure_priority_outcomes = [];
 
@@ -649,8 +666,118 @@ class HomeController extends Controller
         foreach($structure_scores as $c_score) {
             array_push($structure_charts_js, [$c_score->category_title, $c_score->score]);
         }
+
+        $market_intelligence_recs = ['market research','market segmentation','competitor analysis','ideal customer profile','unique selling point','competitive advantage','sam som tam','total addressable market','proof of concept'];
+        $strategic_planning_recs = ['lean start-up strategy','business plan','scale strategy','boot strapping strategy','value proposition canvas','elevator pitch','crm','revenue models'];
+        $financial_management_recs = ['budgeting and forecasting','reconciliations','cash flow management','p&l statement + balance sheet','pricing','costing'];
+        $marketing_and_sales_recs = ['social media marketing','monitoring and evaluation','sales planning','product/service pricing','auditing and review','marketing plan','marketing strategy','sales funnel','customer acquisition plan','sales personnel'];
+        $product_dev_recs = ['saas','equipment & materials','e-commerce'];
+        $talent_management_recs = ['owner & management commitment','founder skills & expertise','training & content development','organizational design and development','employee satisfaction','employee skills & performance'];
+        $process_management_recs = ['process development','process auditing & review','non-conformance & corrective actions management','communication and tracking'];
+        $legal_recs = ['company law','corporate law','labour law','finance law'];
+
+        $answers = answer::where('user_id','=', $user->id)->where('biz_id', '=', $company_id)->get();
+
+        $mi_recs = [];
+        $sp_recs = [];
+        $fm_recs = [];
+        $mas_recs = [];
+        $pd_recs = [];
+        $tm_recs = [];
+        $pm_recs = [];
+        $le_recs = [];
+
+        foreach ($answers as $answer) {
+            if (in_array(strtolower($answer->recom), $market_intelligence_recs)) {
+                if (in_array($answer->recom, $mi_recs) != true) {
+                    array_push($mi_recs, $answer->recom);
+                }
+            }
+        }
+
+        foreach ($answers as $answer) {
+            if (in_array(strtolower($answer->recom), $strategic_planning_recs)) {
+                if (in_array($answer->recom, $sp_recs) != true) {
+                    array_push($sp_recs, $answer->recom);
+                }
+            }
+
+            
+        }
+
+        foreach ($answers as $answer) {
+            if (in_array(strtolower($answer->recom), $financial_management_recs)) {
+                if (in_array($answer->recom, $fm_recs) != true) {
+                    array_push($fm_recs, $answer->recom);
+                }
+            }
+        }
         
-        return view('site.full-report', compact(['user', 'company', 'cate_groups', 'concept_charts_js','structure_charts_js', 'concept_priority_scores', 'concept_best_performing', 'concept_major_gaps', 'structure_priority_scores', 'structure_best_performing', 'structure_major_gaps', 'biz_scores']));
+        foreach ($answers as $answer) {
+            if (in_array(strtolower($answer->recom), $marketing_and_sales_recs)) {
+                if (in_array($answer->recom, $mas_recs) != true) {
+                    array_push($mas_recs, $answer->recom);
+                }
+            }
+        }
+
+        foreach ($answers as $answer) {
+            if (in_array(strtolower($answer->recom), $product_dev_recs)) {
+                if (in_array($answer->recom, $pd_recs) != true) {
+                    array_push($pd_recs, $answer->recom);
+                }
+            }
+        }
+
+        foreach ($answers as $answer) {
+            if (in_array(strtolower($answer->recom), $talent_management_recs)) {
+                if (in_array($answer->recom, $tm_recs) != true) {
+                    array_push($tm_recs, $answer->recom);
+                }
+            }
+        }
+
+        foreach ($answers as $answer) {
+            if (in_array(strtolower($answer->recom), $process_management_recs)) {
+                if (in_array($answer->recom, $pm_recs) != true) {
+                    array_push($pm_recs, $answer->recom);
+                }
+            }
+        }
+
+        foreach ($answers as $answer) {
+            if (in_array(strtolower($answer->recom), $legal_recs)) {
+                if (in_array($answer->recom, $le_recs) != true) {
+                    array_push($le_recs, $answer->recom);
+                }
+            }
+        }
+        
+        return view('site.full-report', 
+                    compact([
+                        'user', 
+                        'company', 
+                        'cate_groups', 
+                        'concept_charts_js',
+                        'structure_charts_js', 
+                        'concept_priority_scores', 
+                        'concept_best_performing', 
+                        'concept_major_gaps', 
+                        'structure_priority_scores',
+                        'structure_best_performing', 
+                        'structure_major_gaps', 
+                        'biz_scores',
+                        'mi_recs',
+                        'sp_recs', 
+                        'fm_recs',
+                        'mas_recs',
+                        'pd_recs',
+                        'tm_recs',
+                        'pm_recs',
+                        'le_recs',
+                        'concept_other_assessment',
+                        'structure_other_assessment'
+                        ]));
     }
 
     public function foo_bar() {

@@ -51,9 +51,9 @@
                     <hr>
                     <p>Is your company registered?</p>
                         {{ Form::label('registered', 'Yes') }}
-                        {{ Form::radio('registered', 0) }}
+                        {{ Form::radio('registered', 0, '', ['class'=>'radio']) }}
                         {{ Form::label('registered', 'No') }}
-                        {{ Form::radio('registered', 1) }}
+                        {{ Form::radio('registered', 1, '', ['class'=>'radio']) }}
                     <hr>
                     <p>Registration Number</p>
                     {{ Form::text('reg_number', '', ['class'=>'form-control', 'id'=>'reg_number', 'placeholder'=>'Registration number...']) }}
@@ -154,4 +154,12 @@
         </div>
     </div>
 </div>
+
+<script>
+    jQuery(document).ready(function(){
+        $('.radio').on('change', function() {
+            $('#reg_bin').toggle(+this.value === 1 && this.checked);
+        }).change();
+    });
+</script>
 @endsection

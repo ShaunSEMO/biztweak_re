@@ -38,7 +38,7 @@
         </div>
 
         <div class="col-md-8">
-            <div class="card" style="background-color: #5BD4D9; border: none;">
+            <div class="card" style="background-color: #5bd5d900; border: none;">
                 <div class="card-header" style="border-radius: 25px; background-color: #2a8f92; color: white;">Your Companies</div>
                 <br>
                 <div class="card-body">

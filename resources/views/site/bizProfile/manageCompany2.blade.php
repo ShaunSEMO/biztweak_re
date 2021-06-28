@@ -71,14 +71,69 @@
 
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">Biz Profile</button>
+                    <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">Biz Assessment</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="assessment-tab" data-bs-toggle="tab" data-bs-target="#assessment" type="button" role="tab" aria-controls="assessment" aria-selected="false">Biz Assessment</button>
+                    <button class="nav-link" id="assessment-tab" data-bs-toggle="tab" data-bs-target="#assessment" type="button" role="tab" aria-controls="assessment" aria-selected="false">Biz Profile</button>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <br>
+                    <br>
+                    @if ($assessment_complete != null)
+                    <h3>Biz Assessment</h3>
+                    <br>
+                        <div class="accordion" id="accordionExample">
+                            {!! Form::open(['action' => ['App\Http\Controllers\HomeController@saveAssessment', $user->id, $company->id], 'files' => true, 'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
+                                @foreach ($categories as $category)
+                                    <div class="accordion-item" style="background-color: #2a8f9200">
+                                        <h2 class="accordion-header" id="heading{{ $category->id }}">
+                                            <button style="color: white; background-color: #2a8f92;" class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $category->id }}" aria-expanded="true" aria-controls="collapse{{ $category->id }}">
+                                                {{ $category->category_title }}
+                                            </button>
+                                        </h2>
+                                        
+                                        <div style="margin-top: 10px;" id="collapse{{ $category->id }}" class="accordion-collapse collapse show container" aria-labelledby="heading{{ $category->id }}" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body row" style="background-color: white; color: black; border-radius: 25px; padding: 10px;">
+                                                    @foreach ($category->assessments as $assessment)
+                                                        <div class="col-md-8">
+                                                            <p>{{ $assessment->question_text }}</p>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <br>
+                                                            {{ Form::hidden('assessment_id_'.$assessment->id, $assessment->id) }}
+                                                            {{ Form::hidden('company_id', $company->id) }}
+                                                            {{ Form::hidden('category_id_'.$assessment->id, $assessment->category_id) }}
+                                                            {{ Form::hidden('po_outcome'.$assessment->id, $assessment->po_outcome) }}
+                                                            {{ Form::hidden('ne_outcome'.$assessment->id, $assessment->ne_outcome) }}
+                                                            {{ Form::hidden('recom'.$assessment->id, $assessment->recom) }}
+                                                            {{ Form::label('question'.$assessment->id, 'Yes') }}
+                                                            {{ Form::radio('question'.$assessment->id, 1) }}
+                                                            {{ Form::label('question'.$assessment->id, 'No') }}
+                                                            {{ Form::radio('question'.$assessment->id, 0) }}
+                                                            <br>
+                                                        </div>
+                                                    @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br><br>
+                                @endforeach
+                            {{ Form::submit('Save', ['class' => 'btn btn-primary std-btn']) }}
+                            {!! Form::close() !!}
+                        <br>
+                      </div>
+                    @else
+                        <h3>Assessment Complete</h3>
+                        <hr style="max-width: 100px;">
+                        <p>Please view the report summary for assessment results</p>
+                    @endif
+                    <a href="{{ url($company->id.'/report-summary') }}" class="btn btn-primary std-btn"><i class="fas fa-chart-pie"></i>Report Summary</a>
+                    
+
+                </div>
+                <div class="tab-pane fade" id="assessment" role="tabpanel" aria-labelledby="assessment-tab">
                     <br>
                     <br>
                     <div class="card user-container">
@@ -199,59 +254,11 @@
                         </div>
                     </div>
 
-                </div>
-                <div class="tab-pane fade" id="assessment" role="tabpanel" aria-labelledby="assessment-tab">
-                    <br>
-                    <br>
-                    @if ($assessment_complete != null)
-                    <h3>Biz Assessment</h3>
-                    <br>
-                        <div class="accordion" id="accordionExample">
-                            {!! Form::open(['action' => ['App\Http\Controllers\HomeController@saveAssessment', $user->id, $company->id], 'files' => true, 'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
-                                @foreach ($categories as $category)
-                                    <div class="accordion-item" style="background-color: #2a8f9200">
-                                        <h2 class="accordion-header" id="heading{{ $category->id }}">
-                                            <button style="color: white; background-color: #2a8f92;" class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $category->id }}" aria-expanded="true" aria-controls="collapse{{ $category->id }}">
-                                                {{ $category->category_title }}
-                                            </button>
-                                        </h2>
-                                        
-                                        <div style="margin-top: 10px;" id="collapse{{ $category->id }}" class="accordion-collapse collapse show container" aria-labelledby="heading{{ $category->id }}" data-bs-parent="#accordionExample">
-                                            <div class="accordion-body row" style="background-color: white; color: black; border-radius: 25px; padding: 10px;">
-                                                    @foreach ($category->assessments as $assessment)
-                                                        <div class="col-md-8">
-                                                            <p>{{ $assessment->question_text }}</p>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <br>
-                                                            {{ Form::hidden('assessment_id_'.$assessment->id, $assessment->id) }}
-                                                            {{ Form::hidden('company_id', $company->id) }}
-                                                            {{ Form::hidden('category_id_'.$assessment->id, $assessment->category_id) }}
-                                                            {{ Form::hidden('po_outcome'.$assessment->id, $assessment->po_outcome) }}
-                                                            {{ Form::hidden('ne_outcome'.$assessment->id, $assessment->ne_outcome) }}
-                                                            {{ Form::hidden('recom'.$assessment->id, $assessment->recom) }}
-                                                            {{ Form::label('question'.$assessment->id, 'Yes') }}
-                                                            {{ Form::radio('question'.$assessment->id, 1) }}
-                                                            {{ Form::label('question'.$assessment->id, 'No') }}
-                                                            {{ Form::radio('question'.$assessment->id, 0) }}
-                                                            <br>
-                                                        </div>
-                                                    @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <br><br>
-                                @endforeach
-                            {{ Form::submit('Save', ['class' => 'btn btn-primary std-btn']) }}
-                            {!! Form::close() !!}
-                        <br>
-                      </div>
-                    @else
-                        <h3>Assessment Complete</h3>
-                        <hr style="max-width: 100px;">
-                        <p>Please view the report summary for assessment results</p>
-                    @endif
-                    <a href="{{ url($company->id.'/report-summary') }}" class="btn btn-primary std-btn"><i class="fas fa-chart-pie"></i>Report Summary</a>
+
+
+
+
+                    
                 </div>
             </div>
 

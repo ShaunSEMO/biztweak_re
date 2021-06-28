@@ -53,21 +53,83 @@
                           <div class="modal-body" style="background-color: white; border-radius: 25px; margin-top: 20px;">
                             <p>The following are the topics and learning content you need to read and implement in order to improve the processes, systems in your business, as well as business performance</p>
                             <br>
-                            @foreach ($biz_scores as $biz_score)
-                              <h4>{{ $biz_score->category_title }}</h4>
-                                @php
-                                  $recom_list = [];
-                                  foreach ($biz_score->answers as $answer) {
-                                    if ($answer->answer == 0 and in_array($answer->recom, $recom_list) == False){
-                                      array_push($recom_list, $answer->recom);
-                                    }
-                                  } 
-                                @endphp
+                            @if (count($mi_recs)!=0)
+                              <h4>Market Intelligence</h4>
     
-                                @foreach ($recom_list as $item)
-                                    <p>-{{ $item }}</p>
-                                @endforeach  
-                            @endforeach
+                              @foreach ($mi_recs as $rec)
+                                <p>-{{ $rec }}</p>
+                              @endforeach 
+                            @endif
+                            
+                            <br>
+
+                            @if (count($sp_recs)!=0)
+                              <h4>Stategic Planning</h4>
+    
+                              @foreach ($sp_recs as $rec)
+                                <p>-{{ $rec }}</p>
+                              @endforeach 
+                            @endif
+
+                            <br>
+
+                            @if (count($fm_recs)!=0)
+                              <h4>Financial Management</h4>
+    
+                              @foreach ($fm_recs as $rec)
+                                <p>-{{ $rec }}</p>
+                              @endforeach 
+                            @endif
+
+                            <br>
+
+                            @if (count($mas_recs)!=0)
+                              <h4>Marketing and Sales</h4>
+    
+                              @foreach ($mas_recs as $rec)
+                                <p>-{{ $rec }}</p>
+                              @endforeach 
+                            @endif
+
+                            <br>
+
+                            @if (count($pd_recs)!=0)
+                              <h4>Product Development</h4>
+    
+                              @foreach ($pd_recs as $rec)
+                                <p>-{{ $rec }}</p>
+                              @endforeach 
+                            @endif
+
+                            <br>
+
+                            @if (count($tm_recs)!=0)
+                              <h4>Talent Management</h4>
+    
+                              @foreach ($tm_recs as $rec)
+                                <p>-{{ $rec }}</p>
+                              @endforeach 
+                            @endif
+
+                            <br>
+
+                            @if (count($pm_recs)!=0)
+                              <h4>Business Process Management</h4>
+    
+                              @foreach ($pm_recs as $rec)
+                                <p>-{{ $rec }}</p>
+                              @endforeach 
+                            @endif
+
+                            <br>
+
+                            @if (count($le_recs)!=0)
+                              <h4>Legal</h4>
+    
+                              @foreach ($le_recs as $rec)
+                                <p>-{{ $rec }}</p>
+                              @endforeach 
+                            @endif
                           </div>
                         </div>
                       </div>
@@ -116,7 +178,7 @@
     <br>
       <div class="card-body">
           <div class="accordion" id="accordionExample">
-                  <div class="accordion-item">
+                  <div class="accordion-item" style="background-color: #a9f2f500 !important">
                       <h1 class="accordion-header" id="heading1">
                       <button style="color: white; background-color: #2a8f92;" class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
                           Business Concept
@@ -124,14 +186,14 @@
                       </h1>
                       
                       <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="heading1" >
-                          <div class="accordion-body">
+                          <div class="accordion-body" >
                               <div id="concept_chart" class="rounded-charts" style="max-width: 1100px; max-height: 800px;"></div>
                               <hr>
                               <h4>Business Diagnosis</h4>
                               <br>
                               <br>
                               <div class="accordion" id="accordionExample">
-                                  <div class="accordion-item cust-accordion">
+                                  <div class="accordion-item cust-accordion" style="background-color: #a9f2f500 !important">
                                     <h2 class="accordion-header" id="headingOne">
                                       <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                         Priority Elements
@@ -155,7 +217,7 @@
                                     </div>
                                   </div>
                                   <br>
-                                  <div class="accordion-item cust-accordion">
+                                  <div class="accordion-item cust-accordion" style="background-color: #a9f2f500 !important">
                                     <h2 class="accordion-header" id="headingTwo">
                                       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                         Best Performing Areas
@@ -181,7 +243,7 @@
                                     </div>
                                   </div>
                                   <br>
-                                  <div class="accordion-item cust-accordion">
+                                  <div class="accordion-item cust-accordion" style="background-color: #a9f2f500 !important">
                                     <h2 class="accordion-header" id="headingThree">
                                       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                         Major Gaps
@@ -206,12 +268,38 @@
                                       </div>
                                     </div>
                                   </div>
+                                  <br>
+                                  <div class="accordion-item cust-accordion" style="background-color: #a9f2f500 !important">
+                                    <h2 class="accordion-header" id="headingThree">
+                                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                        Other Assessments
+                                      </button>
+                                    </h2>
+                                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" >
+                                      <div class="accordion-body">
+                                        <ul class="list-group list-group-numbered">
+                                          @foreach ($concept_other_assessment as $gap)
+                                            <li class="list-group-item d-flex justify-content-between align-items-start list-group-item-danger">
+                                              <div class="ms-2 me-auto">
+                                                <div class="fw-bold">{{ $gap->category_title }}</div>
+                                                <hr>
+                                                @foreach ($gap->answers as $answer)
+                                                  <p>--{{ $answer->outcome }}</p>
+                                                @endforeach
+                                              </div>
+                                              <span class="badge bg-primary rounded-pill">{{ $gap->score }}%</span>
+                                            </li>
+                                          @endforeach
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
                           </div>
                       </div>
                   </div>
 
-                  <div class="accordion-item">
+                  <div class="accordion-item" style="background-color: #a9f2f500 !important">
                       <h1 class="accordion-header" id="heading2">
                       <button style="color: white; background-color: #2a8f92;" class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="true" aria-controls="collapseTwo">
                           Business Structure
@@ -225,7 +313,7 @@
                               <br>
                               <br>
                               <div class="accordion" id="accordionExample">
-                                <div class="accordion-item cust-accordion">
+                                <div class="accordion-item cust-accordion" style="background-color: #a9f2f500 !important">
                                   <h2 class="accordion-header" id="headingOne">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                       Priority Elements
@@ -249,7 +337,7 @@
                                   </div>
                                 </div>
                                 <br>
-                                <div class="accordion-item cust-accordion">
+                                <div class="accordion-item cust-accordion" style="background-color: #a9f2f500 !important">
                                   <h2 class="accordion-header" id="headingTwo">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                       Best Performing Areas
@@ -275,7 +363,7 @@
                                   </div>
                                 </div>
                                 <br>
-                                <div class="accordion-item cust-accordion">
+                                <div class="accordion-item cust-accordion" style="background-color: #a9f2f500 !important">
                                   <h2 class="accordion-header" id="headingThree">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                       Major Gaps
@@ -291,6 +379,32 @@
                                               <hr>
                                               @foreach ($gap->answers as $answer)
                                                   <p>--{{ $answer->outcome }}</p>
+                                              @endforeach
+                                            </div>
+                                            <span class="badge bg-primary rounded-pill">{{ $gap->score }}%</span>
+                                          </li>
+                                        @endforeach
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </div>
+                                <br>
+                                <div class="accordion-item cust-accordion" style="background-color: #a9f2f500 !important">
+                                  <h2 class="accordion-header" id="headingThree">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                      Other Assessments
+                                    </button>
+                                  </h2>
+                                  <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" >
+                                    <div class="accordion-body">
+                                      <ul class="list-group list-group-numbered">
+                                        @foreach ($structure_other_assessment as $gap)
+                                          <li class="list-group-item d-flex justify-content-between align-items-start list-group-item-danger">
+                                            <div class="ms-2 me-auto">
+                                              <div class="fw-bold">{{ $gap->category_title }}</div>
+                                              <hr>
+                                              @foreach ($gap->answers as $answer)
+                                                <p>--{{ $answer->outcome }}</p>
                                               @endforeach
                                             </div>
                                             <span class="badge bg-primary rounded-pill">{{ $gap->score }}%</span>

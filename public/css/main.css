@@ -10,7 +10,10 @@
 }
 
 #app {
-    background: #5BD4D9;
+    background-color: #5BD4D9;
+    background-image: url('../img/bg3.png');
+    background-position: center center;
+    /* background-size: cover;y */
 }
 
 .gb-navbar {
