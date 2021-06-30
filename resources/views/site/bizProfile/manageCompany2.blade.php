@@ -95,27 +95,32 @@
                                         </h2>
                                         
                                         <div style="margin-top: 10px;" id="collapse{{ $category->id }}" class="accordion-collapse collapse show container" aria-labelledby="heading{{ $category->id }}" data-bs-parent="#accordionExample">
-                                            <div class="accordion-body row" style="background-color: white; color: black; border-radius: 25px; padding: 10px;">
-                                                    @foreach ($category->assessments as $assessment)
-                                                        <div class="col-md-8">
-                                                            <p>{{ $assessment->question_text }}</p>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <br>
-                                                            {{ Form::hidden('assessment_id_'.$assessment->id, $assessment->id) }}
-                                                            {{ Form::hidden('company_id', $company->id) }}
-                                                            {{ Form::hidden('category_id_'.$assessment->id, $assessment->category_id) }}
-                                                            {{ Form::hidden('po_outcome'.$assessment->id, $assessment->po_outcome) }}
-                                                            {{ Form::hidden('ne_outcome'.$assessment->id, $assessment->ne_outcome) }}
-                                                            {{ Form::hidden('recom'.$assessment->id, $assessment->recom) }}
+                                            <div class="accordion-body"  style="background-color: white; color: black; border-radius: 25px; padding: 10px;">
+                                                @foreach ($category->assessments as $assessment)
+                                                <div class="row" id="{{'yes_no_group_'.$assessment->id}}">
+                                                    <div class="col-md-8">
+                                                        <p>{{ $assessment->question_text }}</p>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <br>
+                                                        {{ Form::hidden('assessment_id_'.$assessment->id, $assessment->id) }}
+                                                        {{ Form::hidden('company_id', $company->id) }}
+                                                        {{ Form::hidden('category_id_'.$assessment->id, $assessment->category_id) }}
+                                                        {{ Form::hidden('po_outcome'.$assessment->id, $assessment->po_outcome) }}
+                                                        {{ Form::hidden('ne_outcome'.$assessment->id, $assessment->ne_outcome) }}
+                                                        {{ Form::hidden('recom'.$assessment->id, $assessment->recom) }}
+                                                        
                                                             {{ Form::label('question'.$assessment->id, 'Yes') }}
                                                             {{ Form::radio('question'.$assessment->id, 1) }}
                                                             {{ Form::label('question'.$assessment->id, 'No') }}
                                                             {{ Form::radio('question'.$assessment->id, 0) }}
-                                                            <br>
-                                                        </div>
-                                                    @endforeach
-                                            </div>
+                                                    
+                                                        
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                                @endforeach
+                                        </div>
                                         </div>
                                     </div>
                                     <br><br>
@@ -165,7 +170,7 @@
                                     <hr>
                                 </div>
                                 <p>Company Location</p>
-                                {{ Form::text('location', $company->location, ['class'=>'form-control', 'placeholder'=>'Company physical address...']) }}
+                                {{ Form::text('location', $company->location, ['class'=>'form-control', 'id'=>'autocomplete', 'placeholder'=>'Company physical address...']) }}
                                 <hr>
                                 <p>Business industry</p>
                                 {{ Form::select('industry', [
@@ -265,7 +270,7 @@
         </div>
     </div>
 </div>
-
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWgofmlaFcQk9PHyzTzDCJR3zWjcMg9kY&libraries=places"></script>
 <script>
     jQuery(document).ready(function(){
         $('.radio').on('change', function() {
@@ -273,4 +278,43 @@
         }).change();
     });
 </script>
+<script type="text/javascript">
+    var placeSearch, autocomplete, geocoder;
+    function initAutocomplete() {
+        geocoder = new google.maps.Geocoder();
+        autocomplete = new google.maps.places.Autocomplete(
+            (document.getElementById('autocomplete')), {
+                types: ['geocode']
+            });
+        autocomplete.addListener('place_changed', fillInAddress);
+    }
+    function codeAddress(address) {
+        geocoder.geocode({
+            'address': address
+        }, function (results, status) {
+            if (status == 'OK') {
+                // This is the lat and lng results[0].geometry.location
+                // alert(results[0].geometry.location);
+            } else {
+                // alert('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    }
+    
+    function fillInAddress() {
+        var place = autocomplete.getPlace();
+    
+        codeAddress(document.getElementById('autocomplete').value);
+    }
+    $(document).ready(function () {
+        if ($('#autocomplete').length > 0) {
+            initAutocomplete();
+        }
+    });
+ </script>
+
+@foreach ($dissapear_scripts as $script)
+{!! $script !!}
+@endforeach
+
 @endsection

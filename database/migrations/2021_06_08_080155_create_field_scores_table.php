@@ -18,6 +18,7 @@ class CreateFieldScoresTable extends Migration
             $table->integer('user_id');
             $table->integer('biz_id');
             $table->string('field_name');
+            $table->string('field_desc');
             $table->integer('field_score');
             $table->timestamps();
         });

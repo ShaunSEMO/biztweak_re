@@ -11,8 +11,9 @@
 
 #app {
     background-color: #5BD4D9;
-    background-image: url('../img/bg3.png');
+    background-image: url('../img/bg5.png');
     background-position: center center;
+    background-attachment: fixed;
     /* background-size: cover;y */
 }
 
@@ -91,4 +92,67 @@
 
 .nav-tabs {
     border:none;
+}
+
+.std-hr {
+    background-color: #2a8f92;
+    width: 100px;
+    height: 3px !important;
+    opacity: 1 !important;
+}
+
+.field_score_cont {
+    max-height: 500px;
+    overflow: scroll;
+    border-radius: 25px;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #5BD4D9;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #2a8f92;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #fff;
+  }
+
+
+  .field-cont:nth-child(2n){
+    background-color: #2a8f92 !important;
+    color: white;
+}
+
+.field-cont {
+    background-color: #a3f1f3;
+    color: #2a8f92;
+    padding: 30px;
+    border-radius: 25px;
+    margin-bottom: 10px;
+}
+
+.field-cont rect {
+    fill: transparent;
+}
+
+.b_rating rect {
+    fill: transparent;
+}
+
+.test {
+    color: #00cbda;
+}
+
+.field-root {
+    margin: auto;
 }

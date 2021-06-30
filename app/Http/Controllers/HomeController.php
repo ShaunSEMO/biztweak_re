@@ -111,8 +111,27 @@ class HomeController extends Controller
         // $curr_category = assessment::where('phase', '=', $company->biz_phase)->first()->category;
         $categories = category::where($phase, '=', 1)->get();
 
-        // return response($assessment_complete);
-        return view('site.bizProfile.manageCompany', compact(['company', 'user', 'phase', 'assessments', 'categories', 'assessment_complete']));
+        $dissapear_scripts = [];
+
+        foreach ($categories as $categ) {
+            foreach ($categ->assessments as $assessment) {
+                array_push($dissapear_scripts, 
+                "<script>
+                    jQuery(document).ready(function(){
+                        var inputs = $('#yes_no_group_".$assessment->id." input');
+                
+                        inputs.on('change', function() {
+                            $('#yes_no_group_".$assessment->id."').css({ 'display': 'none'})
+                        })
+                        console.log(".$assessment->id.")
+                    });
+                </script>"
+                );
+            };
+        }
+
+        // return response($dissapear_scripts);
+        return view('site.bizProfile.manageCompany', compact(['company', 'user', 'phase', 'assessments', 'categories', 'assessment_complete', 'dissapear_scripts']));
     }
 
     public function manageCompany2($id) {
@@ -125,8 +144,27 @@ class HomeController extends Controller
         // $curr_category = assessment::where('phase', '=', $company->biz_phase)->first()->category;
         $categories = category::where($phase, '=', 1)->get();
 
+        $dissapear_scripts = [];
+
+        foreach ($categories as $categ) {
+            foreach ($categ->assessments as $assessment) {
+                array_push($dissapear_scripts, 
+                "<script>
+                    jQuery(document).ready(function(){
+                        var inputs = $('#yes_no_group_".$assessment->id." input');
+                
+                        inputs.on('change', function() {
+                            $('#yes_no_group_".$assessment->id."').css({ 'display': 'none'})
+                        })
+                        console.log(".$assessment->id.")
+                    });
+                </script>"
+                );
+            };
+        }
+
         // return response($assessment_complete);
-        return view('site.bizProfile.manageCompany2', compact(['company', 'user', 'phase', 'assessments', 'categories', 'assessment_complete']));
+        return view('site.bizProfile.manageCompany2', compact(['company', 'user', 'phase', 'assessments', 'categories', 'assessment_complete', 'dissapear_scripts']));
     }
 
     public function editCompany($id, Request $request) {
@@ -161,7 +199,8 @@ class HomeController extends Controller
         $company->eft_to_perc  = $request->input('eft_to_perc');
         $company->save();
 
-        return redirect('/'.$id.'/manage-company');
+        // return redirect('/'.$id.'/manage-company');
+        response($request->input('test'));
     }
 
     public function saveAssessment($user_id, $company_id, Request $request) {
@@ -178,6 +217,7 @@ class HomeController extends Controller
         $biz_viability->user_id = $user_id;
         $biz_viability->biz_id = $company_id;
         $biz_viability->field_name = "Biz viability";
+        $biz_viability->field_desc = 'Take this assessment if you want to know if your business idea can work.';
         $biz_viability->field_score = 0;
         $biz_viability->save();
 
@@ -185,6 +225,7 @@ class HomeController extends Controller
         $customer_revenue->user_id = $user_id;
         $customer_revenue->biz_id = $company_id;
         $customer_revenue->field_name = "Get customers and revenue";
+        $customer_revenue->field_desc = 'Get desc from Arthur';
         $customer_revenue->field_score = 0;
         $customer_revenue->save();
 
@@ -192,6 +233,7 @@ class HomeController extends Controller
         $market_viability->user_id = $user_id;
         $market_viability->biz_id = $company_id;
         $market_viability->field_name = "Market viability";
+        $market_viability->field_desc = 'Take this assessment if you want to test the market readiness of your business.';
         $market_viability->field_score = 0;
         $market_viability->save();
         
@@ -199,6 +241,7 @@ class HomeController extends Controller
         $investor_readiness->user_id = $user_id;
         $investor_readiness->biz_id = $company_id;
         $investor_readiness->field_name = "Investor readiness";
+        $investor_readiness->field_desc = 'Take this assessment to find out what you need to get your business investor ready.';
         $investor_readiness->field_score = 0;
         $investor_readiness->save();
 
@@ -206,6 +249,7 @@ class HomeController extends Controller
         $scale_viability->user_id = $user_id;
         $scale_viability->biz_id = $company_id;
         $scale_viability->field_name = "Scale viability";
+        $scale_viability->field_desc = 'Take this assessment if you want to test what your business needs to scale.';
         $scale_viability->field_score = 0;
         $scale_viability->save();
 
@@ -213,6 +257,7 @@ class HomeController extends Controller
         $employee_performance->user_id = $user_id;
         $employee_performance->biz_id = $company_id;
         $employee_performance->field_name = "Employee performance";
+        $employee_performance->field_desc = 'take this assessment to test the quality of employee systems you have.';
         $employee_performance->field_score = 0;
         $employee_performance->save();
 
@@ -220,6 +265,7 @@ class HomeController extends Controller
         $financial->user_id = $user_id;
         $financial->biz_id = $company_id;
         $financial->field_name = "Financial";
+        $financial->field_desc = 'Take this assessment to measure how you are doing in managing your finances.';
         $financial->field_score = 0;
         $financial->save();
 
@@ -613,7 +659,6 @@ class HomeController extends Controller
                             duration: 1000,
                             easing: 'out'
                           },
-                        'title': '".$the_score_js->field_name."',
                         legend: 'none',
                         slices: {
                             0: { color: '#5BD4D9' },
@@ -629,9 +674,15 @@ class HomeController extends Controller
             );
         }
 
+        $biz_score_slices = [];
 
-        // return response($field_scores);
-        return view('site.report-summary', compact(['user','company', 'scores', 'biz_scores', 'cate_scores', 'charts_js', 'field_scores', 'concept_charts_js','structure_charts_js']));
+        foreach($biz_scores as $b_score) {
+            array_push($biz_score_slices, [$b_score->category_title, $b_score->score]);
+        }
+
+
+        // return response($field_scores);                
+        return view('site.report-summary', compact(['user','company', 'scores', 'biz_scores', 'cate_scores', 'charts_js', 'field_scores', 'concept_charts_js','structure_charts_js','biz_score_slices']));
     }
 
     public function fullReport($company_id) {
@@ -642,12 +693,22 @@ class HomeController extends Controller
         $concept_scores = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 1)->get();
         $structure_scores = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->get();
 
-        $concept_priority_scores = biz_score::where('user_id','=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 1)->where('priority_score', '>=', 6)->orderBy('priority_score', 'asc')->get();
+        $conc_vp_score = biz_score::where('user_id','=', $user->id)->where('biz_id', '=', $company_id)->where('category_title', '=', 'Value proposition')->first();
+        $conc_cs_score = biz_score::where('user_id','=', $user->id)->where('biz_id', '=', $company_id)->where('category_title', '=', 'Customer segments')->first();
+        $conc_poc_score = biz_score::where('user_id','=', $user->id)->where('biz_id', '=', $company_id)->where('category_title', '=', 'Proof of concept')->first();
+
+        $struct_talent_score = biz_score::where('user_id','=', $user->id)->where('biz_id', '=', $company_id)->where('category_title', '=', 'Talent')->first();
+        $struct_bpm_score = biz_score::where('user_id','=', $user->id)->where('biz_id', '=', $company_id)->where('category_title', '=', 'Business process management')->first();
+        $struct_fm_score = biz_score::where('user_id','=', $user->id)->where('biz_id', '=', $company_id)->where('category_title', '=', 'Financial Management')->first();
+        
         $concept_best_performing = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 1)->orderBy('score', 'desc')->take(3)->get();
         $concept_major_gaps = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 1)->orderBy('score', 'asc')->take(3)->get();
         $concept_other_assessment = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 1)->where('score', '<', $concept_major_gaps[count($concept_major_gaps)-1]->score)->where('score', '>', $concept_best_performing[count($concept_best_performing)-1]->score)->get();
 
         $structure_priority_scores = biz_score::where('user_id','=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->where('priority_score', '>=', 6)->orderBy('priority_score', 'asc')->get();
+        $structure_priority_scores = biz_score::where('user_id','=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->where('priority_score', '>=', 6)->orderBy('priority_score', 'asc')->get();
+        $structure_priority_scores = biz_score::where('user_id','=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->where('priority_score', '>=', 6)->orderBy('priority_score', 'asc')->get();
+
         $structure_best_performing = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->orderBy('score', 'desc')->take(3)->get();
         $structure_major_gaps = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->orderBy('score', 'asc')->take(3)->get();
         $structure_other_assessment = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->where('score', '<', $structure_major_gaps[count($structure_major_gaps)-1]->score)->where('score', '>', $structure_best_performing[count($structure_best_performing)-1]->score)->get();
@@ -657,7 +718,6 @@ class HomeController extends Controller
 
         $concept_charts_js = [];
         $structure_charts_js = [];
-
 
         foreach($concept_scores as $c_score) {
             array_push($concept_charts_js, [$c_score->category_title, $c_score->score]);
@@ -760,7 +820,6 @@ class HomeController extends Controller
                         'cate_groups', 
                         'concept_charts_js',
                         'structure_charts_js', 
-                        'concept_priority_scores', 
                         'concept_best_performing', 
                         'concept_major_gaps', 
                         'structure_priority_scores',
@@ -776,7 +835,13 @@ class HomeController extends Controller
                         'pm_recs',
                         'le_recs',
                         'concept_other_assessment',
-                        'structure_other_assessment'
+                        'structure_other_assessment',
+                        'conc_vp_score', 
+                        'conc_cs_score',
+                        'conc_poc_score',
+                        'struct_talent_score',
+                        'struct_bpm_score',
+                        'struct_fm_score',
                         ]));
     }
 
@@ -870,10 +935,11 @@ class HomeController extends Controller
         //     }
         // }
 
-        // foreach($categories as $category) {
+        // foreach($categories as $category) {  
         //     foreach($financial_list as $item) {
         //         if (strtolower($item) == strtolower($category->category_title)) {
         //             $category->biz_field = 'Financial';
+
         //             $category->save();
 
         //         }
