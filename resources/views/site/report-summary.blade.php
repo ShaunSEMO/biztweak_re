@@ -104,10 +104,10 @@
     <br>
     <div class="row">
         <div class="col-md-6 ">
-            <div class="rounded-charts" id="concept_chart" style="max-width: 900px; max-height: 500px;"></div>
+            <div class="rounded-charts" id="concept_chart" style="max-width: 900px; height: 400px;"></div>
         </div>
         <div class="col-md-6">
-            <div class="rounded-charts" id="structure_chart" style="max-width: 900px; max-height: 500px;"></div>
+            <div class="rounded-charts" id="structure_chart" style="max-width: 900px; height: 400px;"></div>
         </div>
     </div>
 </div>

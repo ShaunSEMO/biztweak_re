@@ -199,8 +199,8 @@ class HomeController extends Controller
         $company->eft_to_perc  = $request->input('eft_to_perc');
         $company->save();
 
-        // return redirect('/'.$id.'/manage-company');
-        response($request->input('test'));
+        return redirect('/'.$id.'/manage-company');
+        // response($request->input('test'));
     }
 
     public function saveAssessment($user_id, $company_id, Request $request) {
@@ -701,16 +701,16 @@ class HomeController extends Controller
         $struct_bpm_score = biz_score::where('user_id','=', $user->id)->where('biz_id', '=', $company_id)->where('category_title', '=', 'Business process management')->first();
         $struct_fm_score = biz_score::where('user_id','=', $user->id)->where('biz_id', '=', $company_id)->where('category_title', '=', 'Financial Management')->first();
         
-        $concept_best_performing = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 1)->orderBy('score', 'desc')->take(3)->get();
-        $concept_major_gaps = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 1)->orderBy('score', 'asc')->take(3)->get();
+        $concept_best_performing = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 1)->where('score', '>=', 60)->get();
+        $concept_major_gaps = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 1)->where('score', '<', 60)->get();
         $concept_other_assessment = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 1)->where('score', '<', $concept_major_gaps[count($concept_major_gaps)-1]->score)->where('score', '>', $concept_best_performing[count($concept_best_performing)-1]->score)->get();
 
         $structure_priority_scores = biz_score::where('user_id','=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->where('priority_score', '>=', 6)->orderBy('priority_score', 'asc')->get();
         $structure_priority_scores = biz_score::where('user_id','=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->where('priority_score', '>=', 6)->orderBy('priority_score', 'asc')->get();
         $structure_priority_scores = biz_score::where('user_id','=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->where('priority_score', '>=', 6)->orderBy('priority_score', 'asc')->get();
 
-        $structure_best_performing = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->orderBy('score', 'desc')->take(3)->get();
-        $structure_major_gaps = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->orderBy('score', 'asc')->take(3)->get();
+        $structure_best_performing = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->where('score', '>=', 60)->get();
+        $structure_major_gaps = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->where('score', '<', 60)->get();
         $structure_other_assessment = biz_score::where('user_id', '=', $user->id)->where('biz_id', '=', $company_id)->where('group_id', '=', 2)->where('score', '<', $structure_major_gaps[count($structure_major_gaps)-1]->score)->where('score', '>', $structure_best_performing[count($structure_best_performing)-1]->score)->get();
 
 

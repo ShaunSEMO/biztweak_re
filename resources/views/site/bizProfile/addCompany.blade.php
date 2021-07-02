@@ -43,8 +43,9 @@
 
                 <div class="card-body container">
 
-                    <form method="POST" action="{{ url($user->id.'/save-company') }}" accept-charset="UTF-8" enctype="multipart/form-data">
-                        <input name="_token" type="hidden" value="2oXyCViIUnA26hhhrpg63b7Ff0GYjGyxsr1iiJ47"> 
+                    <form method="POST" action="{{ url($user->id.'/save-company')}}" accept-charset="UTF-8" enctype="multipart/form-data">
+                        {{ csrf_field() }}
+                    
                         <p>Company Name</p>
                         <input placeholder="Company name..." name="name" type="text" value="" class="form-control"> 
                         <hr>

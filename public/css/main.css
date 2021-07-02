@@ -143,10 +143,16 @@
 
 .field-cont rect {
     fill: transparent;
+    border: none;
+}
+
+path {
+    stroke: none;
 }
 
 .b_rating rect {
     fill: transparent;
+    border: none;
 }
 
 .test {

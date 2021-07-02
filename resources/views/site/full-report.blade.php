@@ -279,17 +279,15 @@
                                       <div class="accordion-body">
                                         <ul class="list-group list-group-numbered">
                                           @foreach ($concept_best_performing as $performing)
-                                            <li class="list-group-item d-flex justify-content-between align-items-start container-fluid">
+                                            <li class="list-group-item d-flex justify-content-between align-items-start">
                                               <div class="ms-2 me-auto">
                                                 <div class="fw-bold">{{ $performing->category_title }}</div>
                                                 <hr>
                                                 <ul class="list-group list-group-numbered">
-
-
                                                 @foreach ($performing->answers as $answer)
-                                                  <div class="list-group-item d-flex justify-content-between align-items-start">
+                                                  <div class="list-group-item d-flex justify-content-between align-items-start" style="width: 120%;">
                                                         
-                                                <p class="color-code">{{ $answer->outcome }}</p>
+                                                    <p class="color-code">{{ $answer->outcome }}</p>
                                                   </div>
                                                 @endforeach
                                                 </ul>
@@ -320,7 +318,7 @@
 
 
                                                 @foreach ($gap->answers as $answer)
-                                                  <div class="list-group-item d-flex justify-content-between align-items-start">
+                                                  <div class="list-group-item d-flex justify-content-between align-items-start" style="width: 120%;">
                                                         
                                                 <p class="color-code">{{ $answer->outcome }}</p>
                                                   </div>
@@ -335,38 +333,6 @@
                                     </div>
                                   </div>
                                   <br>
-                                  <div class="accordion-item cust-accordion" style="background-color: #a9f2f500 !important">
-                                    <h2 class="accordion-header" id="headingThree">
-                                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                        Other Assessments
-                                      </button>
-                                    </h2>
-                                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" >
-                                      <div class="accordion-body">
-                                        <ul class="list-group list-group-numbered">
-                                          @foreach ($concept_other_assessment as $gap)
-                                            <li class="list-group-item d-flex justify-content-between align-items-start list-group-item-danger">
-                                              <div class="ms-2 me-auto">
-                                                <div class="fw-bold">{{ $gap->category_title }}</div>
-                                                <hr>
-                                                <ul class="list-group list-group-numbered">
-
-
-                                                @foreach ($gap->answers as $answer)
-                                                  <div class="list-group-item d-flex justify-content-between align-items-start">
-                                                        
-                                                <p class="color-code">{{ $answer->outcome }}</p>
-                                                  </div>
-                                                @endforeach
-                                                </ul>
-                                              </div>
-                                              <span class="badge bg-primary rounded-pill">{{ $gap->score }}%</span>
-                                            </li>
-                                          @endforeach
-                                        </ul>
-                                      </div>
-                                    </div>
-                                  </div>
                                 </div>
                           </div>
                       </div>
@@ -516,37 +482,6 @@
                                   </div>
                                 </div>
                                 <br>
-                                <div class="accordion-item cust-accordion" style="background-color: #a9f2f500 !important">
-                                  <h2 class="accordion-header" id="headingThree">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                      Other Assessments
-                                    </button>
-                                  </h2>
-                                  <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" >
-                                    <div class="accordion-body">
-                                      <ul class="list-group list-group-numbered">
-                                        @foreach ($structure_other_assessment as $gap)
-                                          <li class="list-group-item d-flex justify-content-between align-items-start list-group-item-danger">
-                                            <div class="ms-2 me-auto">
-                                              <div class="fw-bold">{{ $gap->category_title }}</div>
-                                              <hr>
-                                              <ul class="list-group list-group-numbered">
-                                              @foreach ($gap->answers as $answer)
-
-                                                <div class="list-group-item d-flex justify-content-between align-items-start">
-                                                      
-                                              <p class="color-code">{{ $answer->outcome }}</p>
-                                                </div>
-                                              @endforeach
-                                              </ul>
-                                            </div>
-                                            <span class="badge bg-primary rounded-pill">{{ $gap->score }}%</span>
-                                          </li>
-                                        @endforeach
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
                               </div>
                           </div>
                       </div>
