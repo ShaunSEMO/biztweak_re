@@ -23,6 +23,7 @@ class User extends Authenticatable
         'password',
         'user_type',
         'biz_code',
+        'is_admin',
         'designation',
     ];
 

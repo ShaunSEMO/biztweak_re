@@ -21,11 +21,13 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWgofmlaFcQk9PHyzTzDCJR3zWjcMg9kY&libraries=places"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div id="image-bg">
+    <div id="app">
         <nav class="navbar navbar-expand-md container">
             <div class="container gb-navbar navbar-light bg-white">
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -36,10 +38,6 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-
-                    </ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -76,77 +74,25 @@
                             </li>
                         @endguest
                     </ul>
+                    <form class="d-flex" action="{{ route('search') }}">
+                        <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-primary" type="submit">Search</button>
+                      </form>
                 </div>
             </div>
         </nav>
 
         <main class="py-4">
-            <div class="container login-class">
-                <div class="row justify-content-center">
-                    <div class="col-md-8">
-                        <div class="card cred-card">
-                            <div class="card-body container login-box">
-                                <div class="card-header"> {{ isset($url) ? ucwords($url) : ""}} {{ __('Login') }}</div>
-
-                                <div class="card-body">
-                                    @isset($url)
-                                    <form method="POST" action='{{ url("login/$url") }}' aria-label="{{ __('Login') }}">
-                                    @else
-                                    <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
-                                    @endisset
-                                        @csrf
-                                {{-- <form method="POST" action="{{ route('login') }}"> --}}
-                                    {{-- @csrf --}}
-
-                                            <input id="email" type="email" placeholder="E-mail address" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                                            @error('email')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-
-                                            <br>
-
-                                            <input id="password" type="password" placeholder="Password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                                            @error('password')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-
-                                            <br>
-
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                                <label class="form-check-label" for="remember">
-                                                    {{ __('Remember Me') }}
-                                                </label>
-                                            </div>
-
-                                            <br>
-
-                                            <button type="submit" class="btn btn-primary std-btn">
-                                                Login
-                                            </button>
-
-                                            <br>
-
-                                            @if (Route::has('password.request'))
-                                                <a class="btn btn-link" href="{{ route('password.request') }}">
-                                                    {{ __('Forgot Your Password?') }}
-                                                </a>
-                                            @endif
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @yield('content')
         </main>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+    <script>
+        jQuery(document).ready(function(){
+            $('.radio').on('change', function() {
+                $('#reg_bin').toggle(+this.value === 1 && this.checked);
+            }).change();
+        });
+    </script>
 </body>
 </html>

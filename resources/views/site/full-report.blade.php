@@ -207,7 +207,7 @@
                                                 @if (isset($conc_vp_score))
                                                   <li class="list-group-item">
                                                     <h5>{{ $conc_vp_score->category_title }}</h5>
-                                                    <p>Score: {{ $conc_vp_score->score }}%</p>
+                                                    <span class="badge rounded-pill bg-primary">{{ $conc_vp_score->score }}%</span>
                                                     <hr>
                                                     <ul class="list-group list-group-numbered">
 
@@ -216,7 +216,7 @@
 
                                                       <div class="list-group-item d-flex justify-content-between align-items-start">
                                                             
-                                                    <p class="color-code">{{ $answer->outcome }}</p>
+                                                        <p class="color-code">{{ $answer->outcome }}</p>
                                                       </div>
                                                     @endforeach
                                                     </ul>
@@ -228,7 +228,7 @@
                                                 @if (isset($conc_cs_score))
                                                   <li class="list-group-item">
                                                     <h5>{{ $conc_cs_score->category_title }}</h5>
-                                                    <p>Score: {{ $conc_cs_score->score }}%</p>
+                                                    <span class="badge rounded-pill bg-primary">{{ $conc_cs_score->score }}%</span>
                                                     <hr>
                                                     <ul class="list-group list-group-numbered">
 
@@ -249,7 +249,7 @@
                                                 @if (isset($conc_poc_score))
                                                   <li class="list-group-item">
                                                     <h5>{{ $conc_poc_score->category_title }}</h5>
-                                                    <p>Score: {{ $conc_poc_score->score }}%</p>
+                                                    <span class="badge rounded-pill bg-primary">{{ $conc_poc_score->score }}%</span>
                                                     <hr>
                                                     <ul class="list-group list-group-numbered">
 
@@ -277,23 +277,21 @@
                                     </h2>
                                     <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" >
                                       <div class="accordion-body">
-                                        <ul class="list-group list-group-numbered">
+                                        <ul class="list-group">
                                           @foreach ($concept_best_performing as $performing)
-                                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                                              <div class="ms-2 me-auto">
-                                                <div class="fw-bold">{{ $performing->category_title }}</div>
-                                                <hr>
-                                                <ul class="list-group list-group-numbered">
+                                            <li class="list-group-item">
+                                              <h5>{{ $performing->category_title }}</h5>
+                                              <span class="badge rounded-pill bg-primary">{{ $performing->score }}%</span>
+                                              <hr>
+                                              <ul class="list-group list-group-numbered">
                                                 @foreach ($performing->answers as $answer)
-                                                  <div class="list-group-item d-flex justify-content-between align-items-start" style="width: 120%;">
-                                                        
+                                                  <div class="list-group-item d-flex justify-content-between align-items-start">   
                                                     <p class="color-code">{{ $answer->outcome }}</p>
                                                   </div>
                                                 @endforeach
-                                                </ul>
-                                              </div>
-                                              <span class="badge bg-primary rounded-pill">{{ $performing->score }}%</span>
+                                              </ul>
                                             </li>
+                                            <br>
                                           @endforeach
                                         </ul>
                                       </div>
@@ -308,25 +306,21 @@
                                     </h2>
                                     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" >
                                       <div class="accordion-body">
-                                        <ul class="list-group list-group-numbered">
+                                        <ul class="list-group">
                                           @foreach ($concept_major_gaps as $gap)
-                                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                                              <div class="ms-2 me-auto">
-                                                <div class="fw-bold">{{ $gap->category_title }}</div>
-                                                <hr>
-                                                <ul class="list-group list-group-numbered">
-
-
+                                            <li class="list-group-item">
+                                              <h5>{{ $gap->category_title }}</h5>
+                                              <span class="badge rounded-pill bg-primary">{{ $gap->score }}%</span>
+                                              <hr>
+                                              <ul class="list-group list-group-numbered">
                                                 @foreach ($gap->answers as $answer)
-                                                  <div class="list-group-item d-flex justify-content-between align-items-start" style="width: 120%;">
-                                                        
-                                                <p class="color-code">{{ $answer->outcome }}</p>
+                                                  <div class="list-group-item d-flex justify-content-between align-items-start">   
+                                                    <p class="color-code">{{ $answer->outcome }}</p>
                                                   </div>
                                                 @endforeach
-                                                </ul>
-                                              </div>
-                                              <span class="badge bg-primary rounded-pill">{{ $gap->score }}%</span>
+                                              </ul>
                                             </li>
+                                            <br>
                                           @endforeach
                                         </ul>
                                       </div>
@@ -365,16 +359,14 @@
                                           @if (isset($struct_talent_score))
                                             <li class="list-group-item">
                                               <h5>{{ $struct_talent_score->category_title }}</h5>
-                                              <p>Score: {{ $struct_talent_score->score }}%</p>
+                                              <span class="badge rounded-pill bg-primary">{{ $struct_talent_score->score }}%</span>
                                               <hr>
                                               <ul class="list-group list-group-numbered">
-                                              @foreach ($struct_talent_score->answers as $answer)
-
-                                                <div class="list-group-item d-flex justify-content-between align-items-start">
-                                                      
-                                              <p class="color-code">{{ $answer->outcome }}</p>
-                                                </div>
-                                              @endforeach
+                                                @foreach ($struct_talent_score->answers as $answer)
+                                                  <div class="list-group-item d-flex justify-content-between align-items-start">   
+                                                    <p class="color-code">{{ $answer->outcome }}</p>
+                                                  </div>
+                                                @endforeach
                                               </ul>
                                             </li>
                                           @endif
@@ -382,16 +374,14 @@
                                           @if (isset($struct_bpm_score))
                                             <li class="list-group-item">
                                               <h5>{{ $struct_bpm_score->category_title }}</h5>
-                                              <p>Score: {{ $struct_bpm_score->score }}%</p>
+                                              <span class="badge rounded-pill bg-primary">{{ $struct_bpm_score->score }}%</span>
                                               <hr>
                                               <ul class="list-group list-group-numbered">
-                                              @foreach ($struct_bpm_score->answers as $answer)
-
-                                                <div class="list-group-item d-flex justify-content-between align-items-start">
-                                                      
-                                              <p class="color-code">{{ $answer->outcome }}</p>
-                                                </div>
-                                              @endforeach
+                                                @foreach ($struct_bpm_score->answers as $answer)
+                                                  <div class="list-group-item d-flex justify-content-between align-items-start">   
+                                                    <p class="color-code">{{ $answer->outcome }}</p>
+                                                  </div>
+                                                @endforeach
                                               </ul>
                                             </li>
                                           @endif
@@ -399,16 +389,14 @@
                                           @if (isset($struct_fm_score))
                                             <li class="list-group-item">
                                               <h5>{{ $struct_fm_score->category_title }}</h5>
-                                              <p>Score: {{ $struct_fm_score->score }}%</p>
+                                              <span class="badge rounded-pill bg-primary">{{ $struct_fm_score->score }}%</span>
                                               <hr>
                                               <ul class="list-group list-group-numbered">
-                                              @foreach ($struct_fm_score->answers as $answer)
-
-                                                <div class="list-group-item d-flex justify-content-between align-items-start">
-                                                      
-                                              <p class="color-code">{{ $answer->outcome }}</p>
-                                                </div>
-                                              @endforeach
+                                                @foreach ($struct_fm_score->answers as $answer)
+                                                  <div class="list-group-item d-flex justify-content-between align-items-start">   
+                                                    <p class="color-code">{{ $answer->outcome }}</p>
+                                                  </div>
+                                                @endforeach
                                               </ul>
                                             </li>
                                           @endif
@@ -426,23 +414,19 @@
                                   </h2>
                                   <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" >
                                     <div class="accordion-body">
-                                      <ul class="list-group list-group-numbered">
+                                      <ul class="list-group">
                                         @foreach ($structure_best_performing as $performing)
-                                          <li class="list-group-item d-flex justify-content-between align-items-start container-fluid">
-                                            <div class="ms-2 me-auto">
-                                              <div class="fw-bold">{{ $performing->category_title }}</div>
-                                              <hr>
-                                              <ul class="list-group list-group-numbered">
+                                          <li class="list-group-item">
+                                            <h5>{{ $performing->category_title }}</h5>
+                                            <span class="badge rounded-pill bg-primary">{{ $performing->score }}%</span>
+                                            <hr>
+                                            <ul class="list-group list-group-numbered">
                                               @foreach ($performing->answers as $answer)
-
-                                                <div class="list-group-item d-flex justify-content-between align-items-start">
-                                                      
-                                              <p class="color-code">{{ $answer->outcome }}</p>
+                                                <div class="list-group-item d-flex justify-content-between align-items-start">   
+                                                  <p class="color-code">{{ $answer->outcome }}</p>
                                                 </div>
                                               @endforeach
-                                              </ul>
-                                            </div>
-                                            <span class="badge bg-primary rounded-pill">{{ $performing->score }}%</span>
+                                            </ul>
                                           </li>
                                         @endforeach
                                       </ul>
@@ -460,21 +444,17 @@
                                     <div class="accordion-body">
                                       <ul class="list-group list-group-numbered">
                                         @foreach ($structure_major_gaps as $gap)
-                                          <li class="list-group-item d-flex justify-content-between align-items-start">
-                                            <div class="ms-2 me-auto">
-                                              <div class="fw-bold">{{ $gap->category_title }}</div>
-                                              <hr>
-                                              <ul class="list-group list-group-numbered">
+                                          <li class="list-group-item">
+                                            <h5>{{ $gap->category_title }}</h5>
+                                            <span class="badge rounded-pill bg-primary">{{ $gap->score }}%</span>
+                                            <hr>
+                                            <ul class="list-group list-group-numbered">
                                               @foreach ($gap->answers as $answer)
-
-                                                <div class="list-group-item d-flex justify-content-between align-items-start">
-                                                        
-                                              <p class="color-code">{{ $answer->outcome }}</p>
+                                                <div class="list-group-item d-flex justify-content-between align-items-start">   
+                                                  <p class="color-code">{{ $answer->outcome }}</p>
                                                 </div>
                                               @endforeach
-                                              </ul>
-                                            </div>
-                                            <span class="badge bg-primary rounded-pill">{{ $gap->score }}%</span>
+                                            </ul>
                                           </li>
                                         @endforeach
                                       </ul>
@@ -495,7 +475,7 @@
   var item_par = document.getElementsByClassName('color-code');
 
   for (let i = 0; i < item_par.length; i++) {
-    if (item_par[i].innerText.includes('not') || item_par[i].innerText.includes('No')) {
+    if (item_par[i].innerText.includes('not') || item_par[i].innerText.includes('No') || item_par[i].innerText.includes('needs')) {
       item_par[i].parentNode.classList.add("list-group-item-danger");
     } else {
       item_par[i].parentNode.classList.add("list-group-item-success");
