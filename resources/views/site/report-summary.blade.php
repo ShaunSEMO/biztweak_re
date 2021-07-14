@@ -75,28 +75,39 @@
 
     <br><br>
 
-    <h3>Summary Report</h3>
+    <h3><span style="color: #2a8f92">Summary</span> Report</h3>
+    <hr class="std-hr">
     <br>
 
     <div class="row">
-        <div class="col-md-12">
-            <div class="row">
+        <div class="col-md-6 field_score_cont ">
+            <div class="row field-root container">
                 @foreach ($field_scores as $score)
-                    <div class="col-md-6">
-                        <div class="rounded-charts" id="{{'chart_'.$score->id}}" style="max-width: 900px; max-height: 500px;"></div>
-                        <br>
+                    <div class="col-md-12 row field-cont">
+                        <div class="col-md-6">
+                            <div id="{{'chart_'.$score->id}}" style="max-width: 900px; max-height: 500px;"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>{{ $score->field_name }}</h4>
+                            <br>
+                            <p>{{ $score->field_desc }}</p>
+                        </div>
                     </div>
                 @endforeach
             </div>
-            <div class="row">
-                <div class="col-md-6 ">
-                    <div class="rounded-charts" id="concept_chart" style="max-width: 900px; max-height: 500px;"></div>
-                </div>
-                <div class="col-md-6">
-                    <div class="rounded-charts" id="structure_chart" style="max-width: 900px; max-height: 500px;"></div>
-                </div>
-            </div>
             <br>
+        </div>
+        <div class="col-md-6 b_rating">
+            <div id="biz_rating" style="max-width: 900px; height: 500px;"></div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-6 ">
+            <div class="rounded-charts" id="concept_chart" style="max-width: 900px; height: 400px;"></div>
+        </div>
+        <div class="col-md-6">
+            <div class="rounded-charts" id="structure_chart" style="max-width: 900px; height: 400px;"></div>
         </div>
     </div>
 </div>
@@ -173,6 +184,38 @@ function drawBasic() {
       chart.draw(data, options);
     }
 </script>
+
+<script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+      var data = new google.visualization.DataTable();
+
+      var data_set = {!! json_encode($biz_score_slices) !!};
+
+      data.addColumn('string', 'Category');
+      data.addColumn('number', 'Score');
+
+      data.addRows(data_set);
+
+
+      var options = {
+        title: 'Biz Rating',
+        slices: {  1: {offset: 0.2},
+                    4: {offset: 0.3},
+                    7: {offset: 0.4},
+                    10: {offset: 0.5},
+          },
+        colors: ['#21e9f0', '#21c0f0', '#b7faff', '#188188', '#00cbda'],
+      };
+
+      var chart = new google.visualization.PieChart(document.getElementById('biz_rating'));
+
+      chart.draw(data, options);
+    }
+  </script>
 
 <script type="text/javascript">
     // ------ Full report ------

@@ -43,6 +43,13 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+        $this->middleware('guest:admin');
+    }
+
+
+    public function showAdminRegisterForm()
+    {
+        return view('auth.register', ['url' => 'admin']);
     }
 
     /**
@@ -72,9 +79,27 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'user_type' => 3,
-            'biz_code' => 'biz949',
-            'designation' => $data['designation'],
+            'user_type' => 1,
+            'biz_code' => NULL,
+            'designation' => NULL,
         ]);
+    }
+
+    protected function createAdmin(Request $request, array $data) {
+        $this->validator($request->all())->validate();
+            if ($data['admincode'] == 'biz_212') {
+                return User::create([
+                    'name' => $data['name'],
+                    'email' => $data['email'],
+                    'password' => Hash::make($data['password']),
+                    'user_type' => 3,
+                    'biz_code' => NULL,
+                    'designation' => NULL,
+                ]);
+            } else {
+                 return redirect('/register/admin');
+            }
+
+        return redirect()->intended('/admin');
     }
 }

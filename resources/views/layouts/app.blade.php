@@ -22,6 +22,7 @@
 
     <!-- Styles -->
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWgofmlaFcQk9PHyzTzDCJR3zWjcMg9kY&libraries=places"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
 </head>
@@ -86,5 +87,12 @@
         </main>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+    <script>
+        jQuery(document).ready(function(){
+            $('.radio').on('change', function() {
+                $('#reg_bin').toggle(+this.value === 1 && this.checked);
+            }).change();
+        });
+    </script>
 </body>
 </html>
